@@ -35,4 +35,18 @@ function checks.is_number_or_nil(value)
   return checks.is_number(value) or _is_nil(value)
 end
 
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_string(value)
+  return type(value) == "string"
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_string_or_nil(value)
+  return checks.is_string(value) or _is_nil(value)
+end
+
 return checks
