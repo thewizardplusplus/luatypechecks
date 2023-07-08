@@ -279,3 +279,95 @@ for _, data in ipairs({
     data.want(result)
   end
 end
+
+-- checks.is_function()
+for _, data in ipairs({
+  {
+    name = "test_is_function/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function/function",
+    args = { value = function() end },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_function/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_function(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_function_or_nil()
+for _, data in ipairs({
+  {
+    name = "test_is_function_or_nil/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_function_or_nil/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function_or_nil/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function_or_nil/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function_or_nil/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_function_or_nil/function",
+    args = { value = function() end },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_function_or_nil/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_function_or_nil(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
