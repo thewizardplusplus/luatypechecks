@@ -88,6 +88,19 @@ function checks.is_table(value, key_checker, value_checker)
 end
 
 ---
+-- @tparam[opt] func key_checker func(value: any): bool
+-- @tparam[optchain] func value_checker func(value: any): bool
+-- @treturn func func(value: any): bool
+function checks.make_table_checker(key_checker, value_checker)
+  assert(checks.is_function_or_nil(key_checker))
+  assert(checks.is_function_or_nil(value_checker))
+
+  return function(value)
+    return checks.is_table(value, key_checker, value_checker)
+  end
+end
+
+---
 -- @tparam any value
 -- @tparam[opt] func key_checker func(value: any): bool
 -- @tparam[optchain] func value_checker func(value: any): bool
@@ -97,6 +110,19 @@ function checks.is_table_or_nil(value, key_checker, value_checker)
   assert(checks.is_function_or_nil(value_checker))
 
   return checks.is_table(value, key_checker, value_checker) or value == nil
+end
+
+---
+-- @tparam[opt] func key_checker func(value: any): bool
+-- @tparam[optchain] func value_checker func(value: any): bool
+-- @treturn func func(value: any): bool
+function checks.make_table_or_nil_checker(key_checker, value_checker)
+  assert(checks.is_function_or_nil(key_checker))
+  assert(checks.is_function_or_nil(value_checker))
+
+  return function(value)
+    return checks.is_table_or_nil(value, key_checker, value_checker)
+  end
 end
 
 return checks

@@ -481,6 +481,118 @@ for _, data in ipairs({
   end
 end
 
+-- checks.make_table_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_table_checker/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/table",
+    args = { value = {} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_checker/table/key_checker/true",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_string,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_checker/table/key_checker/false",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/table/value_checker/true",
+    args = {
+      value = { one = 1, two = 2 },
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_checker/table/value_checker/false",
+    args = {
+      value = { one = 1, two = 2 },
+      value_checker = checks.is_string,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/table/key_and_value_checkers/true",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_string,
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_checker/table/key_and_value_checkers/key_checker_false",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_boolean,
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_checker/table/key_and_value_checkers/value_checker_false",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_string,
+      value_checker = checks.is_boolean,
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_table_checker(
+      data.args.key_checker,
+      data.args.value_checker
+    )
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
 -- checks.is_table_or_nil()
 for _, data in ipairs({
   {
@@ -584,6 +696,118 @@ for _, data in ipairs({
       data.args.key_checker,
       data.args.value_checker
     )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_table_or_nil_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_table_or_nil_checker/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_or_nil_checker/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table",
+    args = { value = {} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/key_checker/true",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_string,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/key_checker/false",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/value_checker/true",
+    args = {
+      value = { one = 1, two = 2 },
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/value_checker/false",
+    args = {
+      value = { one = 1, two = 2 },
+      value_checker = checks.is_string,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/key_and_value_checkers/true",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_string,
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/key_and_value_checkers/key_checker_false",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_boolean,
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_table_or_nil_checker/table/key_and_value_checkers/value_checker_false",
+    args = {
+      value = { one = 1, two = 2 },
+      key_checker = checks.is_string,
+      value_checker = checks.is_boolean,
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_table_or_nil_checker(
+      data.args.key_checker,
+      data.args.value_checker
+    )
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
 
     luaunit.assert_is_boolean(result)
     data.want(result)
