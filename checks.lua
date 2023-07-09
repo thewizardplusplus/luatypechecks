@@ -3,10 +3,6 @@
 
 local checks = {}
 
-local function _is_nil(value)
-  return type(value) == "nil"
-end
-
 ---
 -- @tparam any value
 -- @treturn bool
@@ -18,7 +14,7 @@ end
 -- @tparam any value
 -- @treturn bool
 function checks.is_boolean_or_nil(value)
-  return checks.is_boolean(value) or _is_nil(value)
+  return checks.is_boolean(value) or value == nil
 end
 
 ---
@@ -32,7 +28,7 @@ end
 -- @tparam any value
 -- @treturn bool
 function checks.is_number_or_nil(value)
-  return checks.is_number(value) or _is_nil(value)
+  return checks.is_number(value) or value == nil
 end
 
 ---
@@ -46,7 +42,7 @@ end
 -- @tparam any value
 -- @treturn bool
 function checks.is_string_or_nil(value)
-  return checks.is_string(value) or _is_nil(value)
+  return checks.is_string(value) or value == nil
 end
 
 ---
@@ -60,7 +56,7 @@ end
 -- @tparam any value
 -- @treturn bool
 function checks.is_function_or_nil(value)
-  return checks.is_function(value) or _is_nil(value)
+  return checks.is_function(value) or value == nil
 end
 
 ---
@@ -100,7 +96,7 @@ function checks.is_table_or_nil(value, key_checker, value_checker)
   assert(checks.is_function_or_nil(key_checker))
   assert(checks.is_function_or_nil(value_checker))
 
-  return checks.is_table(value, key_checker, value_checker) or _is_nil(value)
+  return checks.is_table(value, key_checker, value_checker) or value == nil
 end
 
 return checks
