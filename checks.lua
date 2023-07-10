@@ -125,4 +125,65 @@ function checks.make_table_or_nil_checker(key_checker, value_checker)
   end
 end
 
+---
+-- @tparam any value
+-- @tparam[opt] func value_checker func(value: any): bool
+-- @treturn bool
+function checks.is_sequence(value, value_checker)
+  assert(checks.is_function_or_nil(value_checker))
+
+  if not checks.is_table(value, checks.is_number, value_checker) then
+    return false
+  end
+
+  local indices = {}
+  for index, _ in pairs(value) do
+    table.insert(indices, index)
+  end
+  table.sort(indices)
+
+  local expected_index = 1
+  for _, actual_index in ipairs(indices) do
+    if actual_index ~= expected_index then
+      return false
+    end
+
+    expected_index = expected_index + 1
+  end
+
+  return true
+end
+
+---
+-- @tparam[opt] func value_checker func(value: any): bool
+-- @treturn func func(value: any): bool
+function checks.make_sequence_checker(value_checker)
+  assert(checks.is_function_or_nil(value_checker))
+
+  return function(value)
+    return checks.is_sequence(value, value_checker)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam[opt] func value_checker func(value: any): bool
+-- @treturn bool
+function checks.is_sequence_or_nil(value, value_checker)
+  assert(checks.is_function_or_nil(value_checker))
+
+  return checks.is_sequence(value, value_checker) or value == nil
+end
+
+---
+-- @tparam[opt] func value_checker func(value: any): bool
+-- @treturn func func(value: any): bool
+function checks.make_sequence_or_nil_checker(value_checker)
+  assert(checks.is_function_or_nil(value_checker))
+
+  return function(value)
+    return checks.is_sequence_or_nil(value, value_checker)
+  end
+end
+
 return checks

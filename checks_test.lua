@@ -813,3 +813,345 @@ for _, data in ipairs({
     data.want(result)
   end
 end
+
+-- checks.is_sequence()
+for _, data in ipairs({
+  {
+    name = "test_is_sequence/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/table/empty",
+    args = { value = {} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence/table/sequence",
+    args = { value = {"one", "two"} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence/table/sequence/value_checker/true",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_string,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence/table/sequence/value_checker/false",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/table/not_sequence/not_integer_indices",
+    args = { value = { one = 1, two = 2 } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/table/not_sequence/absent_indices",
+    args = { value = { [1] = "one", [3] = "two" } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence/table/not_sequence/indices_not_starting_with_one",
+    args = { value = { [2] = "one", [3] = "two"} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_sequence(
+      data.args.value,
+      data.args.value_checker
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_sequence_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_sequence_checker/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/table/empty",
+    args = { value = {} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_checker/table/sequence",
+    args = { value = {"one", "two"} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_checker/table/sequence/value_checker/true",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_string,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_checker/table/sequence/value_checker/false",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/table/not_sequence/not_integer_indices",
+    args = { value = { one = 1, two = 2 } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/table/not_sequence/absent_indices",
+    args = { value = { [1] = "one", [3] = "two" } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_checker/table/not_sequence/indices_not_starting_with_one",
+    args = { value = { [2] = "one", [3] = "two"} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_sequence_checker(data.args.value_checker)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_sequence_or_nil()
+for _, data in ipairs({
+  {
+    name = "test_is_sequence_or_nil/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence_or_nil/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/empty",
+    args = { value = {} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/sequence",
+    args = { value = {"one", "two"} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/sequence/value_checker/true",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_string,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/sequence/value_checker/false",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/not_sequence/not_integer_indices",
+    args = { value = { one = 1, two = 2 } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/not_sequence/absent_indices",
+    args = { value = { [1] = "one", [3] = "two" } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_sequence_or_nil/table/not_sequence/indices_not_starting_with_one",
+    args = { value = { [2] = "one", [3] = "two"} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_sequence_or_nil(
+      data.args.value,
+      data.args.value_checker
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_sequence_or_nil_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_sequence_or_nil_checker/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/empty",
+    args = { value = {} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/sequence",
+    args = { value = {"one", "two"} },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/true",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_string,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/false",
+    args = {
+      value = {"one", "two"},
+      value_checker = checks.is_number,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/not_sequence/not_integer_indices",
+    args = { value = { one = 1, two = 2 } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/not_sequence/absent_indices",
+    args = { value = { [1] = "one", [3] = "two" } },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_sequence_or_nil_checker/table/not_sequence/indices_not_starting_with_one",
+    args = { value = { [2] = "one", [3] = "two"} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_sequence_or_nil_checker(data.args.value_checker)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
