@@ -188,6 +188,98 @@ for _, data in ipairs({
   end
 end
 
+-- checks.is_integer()
+for _, data in ipairs({
+  {
+    name = "test_is_integer/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_integer/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_integer(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_integer_or_nil()
+for _, data in ipairs({
+  {
+    name = "test_is_integer_or_nil/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_integer_or_nil/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer_or_nil/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_integer_or_nil/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer_or_nil/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer_or_nil/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_integer_or_nil/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_integer_or_nil(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
 -- checks.is_string()
 for _, data in ipairs({
   {

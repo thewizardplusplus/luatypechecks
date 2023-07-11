@@ -34,6 +34,25 @@ end
 ---
 -- @tparam any value
 -- @treturn bool
+function checks.is_integer(value)
+  if not checks.is_number(value) then
+    return false
+  end
+
+  local value_integral_part, _ = math.modf(value)
+  return value == value_integral_part
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_integer_or_nil(value)
+  return checks.is_integer(value) or value == nil
+end
+
+---
+-- @tparam any value
+-- @treturn bool
 function checks.is_string(value)
   return type(value) == "string"
 end
