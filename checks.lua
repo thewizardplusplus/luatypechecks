@@ -80,6 +80,25 @@ end
 
 ---
 -- @tparam any value
+-- @treturn bool
+function checks.is_callable(value)
+  if checks.is_function(value) then
+    return true
+  end
+
+  local metatable = getmetatable(value)
+  return metatable ~= nil and metatable["__call"] ~= nil
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_callable_or_nil(value)
+  return checks.is_callable(value) or value == nil
+end
+
+---
+-- @tparam any value
 -- @tparam[opt] func key_checker func(value: any): bool
 -- @tparam[optchain] func value_checker func(value: any): bool
 -- @treturn bool

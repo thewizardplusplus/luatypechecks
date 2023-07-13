@@ -18,6 +18,8 @@ function Object:__eq(another_object)
   return self.id == another_object.id
 end
 
+function Object.__call() end
+
 -- luacheck: globals TestChecks
 TestChecks = {}
 
@@ -475,6 +477,108 @@ for _, data in ipairs({
 }) do
   TestChecks[data.name] = function()
     local result = checks.is_function_or_nil(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_callable()
+for _, data in ipairs({
+  {
+    name = "test_is_callable/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable/function",
+    args = { value = function() end },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_callable/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable/table/__call_metamethod",
+    args = { value = Object:new(23) },
+    want = luaunit.assert_true,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_callable(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_callable_or_nil()
+for _, data in ipairs({
+  {
+    name = "test_is_callable_or_nil/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_callable_or_nil/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable_or_nil/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable_or_nil/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable_or_nil/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable_or_nil/function",
+    args = { value = function() end },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_callable_or_nil/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_callable_or_nil/table/__call_metamethod",
+    args = { value = Object:new(23) },
+    want = luaunit.assert_true,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_callable_or_nil(data.args.value)
 
     luaunit.assert_is_boolean(result)
     data.want(result)
@@ -1471,7 +1575,7 @@ for _, data in ipairs({
 end
 
 -- checks.is_enumeration_or_nil()
-for _, data in ipairs({  
+for _, data in ipairs({
   {
     name = "test_is_enumeration_or_nil/nil",
     args = {
