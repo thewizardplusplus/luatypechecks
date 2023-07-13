@@ -205,4 +205,52 @@ function checks.make_sequence_or_nil_checker(value_checker)
   end
 end
 
+---
+-- @tparam any value
+-- @tparam {any,...} enumeration
+-- @treturn bool
+function checks.is_enumeration(value, enumeration)
+  assert(checks.is_sequence(enumeration))
+
+  for _, element in ipairs(enumeration) do
+    if value == element then
+      return true
+    end
+  end
+
+  return false
+end
+
+---
+-- @tparam {any,...} enumeration
+-- @treturn func func(value: any): bool
+function checks.make_enumeration_checker(enumeration)
+  assert(checks.is_sequence(enumeration))
+
+  return function(value)
+    return checks.is_enumeration(value, enumeration)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam {any,...} enumeration
+-- @treturn bool
+function checks.is_enumeration_or_nil(value, enumeration)
+  assert(checks.is_sequence(enumeration))
+
+  return checks.is_enumeration(value, enumeration) or value == nil
+end
+
+---
+-- @tparam {any,...} enumeration
+-- @treturn func func(value: any): bool
+function checks.make_enumeration_or_nil_checker(enumeration)
+  assert(checks.is_sequence(enumeration))
+
+  return function(value)
+    return checks.is_enumeration_or_nil(value, enumeration)
+  end
+end
+
 return checks

@@ -1,6 +1,23 @@
 local luaunit = require("luaunit")
 local checks = require("luatypechecks.checks")
 
+local Object = {}
+
+function Object:new(id)
+  assert(checks.is_integer(id))
+
+  local object = setmetatable({}, self)
+  object.id = id
+
+  return object
+end
+
+function Object:__eq(another_object)
+  assert(checks.is_table(another_object))
+
+  return self.id == another_object.id
+end
+
 -- luacheck: globals TestChecks
 TestChecks = {}
 
@@ -1238,6 +1255,416 @@ for _, data in ipairs({
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_sequence_or_nil_checker(data.args.value_checker)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_enumeration()
+for _, data in ipairs({
+  {
+    name = "test_is_enumeration/nil",
+    args = {
+      value = nil,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/boolean",
+    args = {
+      value = true,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/number/integer/true",
+    args = {
+      value = 12,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration/number/integer/false",
+    args = {
+      value = 23,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/number/float",
+    args = {
+      value = 2.3,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/string/true",
+    args = {
+      value = "two",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration/string/false",
+    args = {
+      value = "three",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/function",
+    args = {
+      value = function() end,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/table",
+    args = {
+      value = {},
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration/table/__eq_metamethod/true",
+    args = {
+      value = Object:new(12),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration/table/__eq_metamethod/false",
+    args = {
+      value = Object:new(23),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_enumeration(
+      data.args.value,
+      data.args.enumeration
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_enumeration_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_enumeration_checker/nil",
+    args = {
+      value = nil,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/boolean",
+    args = {
+      value = true,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/number/integer/true",
+    args = {
+      value = 12,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_checker/number/integer/false",
+    args = {
+      value = 23,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/number/float",
+    args = {
+      value = 2.3,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/string/true",
+    args = {
+      value = "two",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_checker/string/false",
+    args = {
+      value = "three",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/function",
+    args = {
+      value = function() end,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/table",
+    args = {
+      value = {},
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_checker/table/__eq_metamethod/true",
+    args = {
+      value = Object:new(12),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_checker/table/__eq_metamethod/false",
+    args = {
+      value = Object:new(23),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_enumeration_checker(data.args.enumeration)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_enumeration_or_nil()
+for _, data in ipairs({  
+  {
+    name = "test_is_enumeration_or_nil/nil",
+    args = {
+      value = nil,
+      enumeration = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration_or_nil/boolean",
+    args = {
+      value = true,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration_or_nil/number/integer/true",
+    args = {
+      value = 12,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration_or_nil/number/integer/false",
+    args = {
+      value = 23,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration_or_nil/number/float",
+    args = {
+      value = 2.3,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration_or_nil/string/true",
+    args = {
+      value = "two",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration_or_nil/string/false",
+    args = {
+      value = "three",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration_or_nil/function",
+    args = {
+      value = function() end,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration_or_nil/table",
+    args = {
+      value = {},
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_enumeration_or_nil/table/__eq_metamethod/true",
+    args = {
+      value = Object:new(12),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_enumeration_or_nil/table/__eq_metamethod/false",
+    args = {
+      value = Object:new(23),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_enumeration_or_nil(
+      data.args.value,
+      data.args.enumeration
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_enumeration_or_nil_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_enumeration_or_nil_checker/nil",
+    args = {
+      value = nil,
+      enumeration = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/boolean",
+    args = {
+      value = true,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/number/integer/true",
+    args = {
+      value = 12,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/number/integer/false",
+    args = {
+      value = 23,
+      enumeration = {5, 12},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/number/float",
+    args = {
+      value = 2.3,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/string/true",
+    args = {
+      value = "two",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/string/false",
+    args = {
+      value = "three",
+      enumeration = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/function",
+    args = {
+      value = function() end,
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/table",
+    args = {
+      value = {},
+      enumeration = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/table/__eq_metamethod/true",
+    args = {
+      value = Object:new(12),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_enumeration_or_nil_checker/table/__eq_metamethod/false",
+    args = {
+      value = Object:new(23),
+      enumeration = {Object:new(5), Object:new(12)},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_enumeration_or_nil_checker(data.args.enumeration)
 
     luaunit.assert_is_function(checker)
 
