@@ -274,4 +274,48 @@ function checks.make_enumeration_or_nil_checker(enumeration)
   end
 end
 
+---
+-- @tparam any value
+-- @tparam tab class a class created by library middleclass
+-- @treturn bool
+function checks.is_instance(value, class)
+  assert(checks.is_table(class))
+
+  return checks.is_table(value)
+    and checks.is_callable(value.isInstanceOf)
+    and value:isInstanceOf(class)
+end
+
+---
+-- @tparam tab class a class created by library middleclass
+-- @treturn func func(value: any): bool
+function checks.make_instance_checker(class)
+  assert(checks.is_table(class))
+
+  return function(value)
+    return checks.is_instance(value, class)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam tab class a class created by library middleclass
+-- @treturn bool
+function checks.is_instance_or_nil(value, class)
+  assert(checks.is_table(class))
+
+  return checks.is_instance(value, class) or value == nil
+end
+
+---
+-- @tparam tab class a class created by library middleclass
+-- @treturn func func(value: any): bool
+function checks.make_instance_or_nil_checker(class)
+  assert(checks.is_table(class))
+
+  return function(value)
+    return checks.is_instance_or_nil(value, class)
+  end
+end
+
 return checks

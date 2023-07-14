@@ -1,5 +1,6 @@
 local luaunit = require("luaunit")
 local checks = require("luatypechecks.checks")
+local middleclass = require("middleclass")
 
 local Object = {}
 
@@ -19,6 +20,10 @@ function Object:__eq(another_object)
 end
 
 function Object.__call() end
+
+local MiddleclassBaseObject = middleclass("MiddleclassBaseObject")
+
+local MiddleclassObject = middleclass("MiddleclassObject", MiddleclassBaseObject)
 
 -- luacheck: globals TestChecks
 TestChecks = {}
@@ -1787,6 +1792,352 @@ for _, data in ipairs({
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_enumeration_or_nil_checker(data.args.enumeration)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_instance()
+for _, data in ipairs({
+  {
+    name = "test_is_instance/nil",
+    args = {
+      value = nil,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/boolean",
+    args = {
+      value = true,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/number/integer",
+    args = {
+      value = 23,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/number/float",
+    args = {
+      value = 2.3,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/string",
+    args = {
+      value = "test",
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/function",
+    args = {
+      value = function() end,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/table",
+    args = {
+      value = {},
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance/table/middleclass_object/directly",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_instance/table/middleclass_object/through_inheritance",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassBaseObject,
+    },
+    want = luaunit.assert_true,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_instance(
+      data.args.value,
+      data.args.class
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_instance_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_instance_checker/nil",
+    args = {
+      value = nil,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/boolean",
+    args = {
+      value = true,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/number/integer",
+    args = {
+      value = 23,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/number/float",
+    args = {
+      value = 2.3,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/string",
+    args = {
+      value = "test",
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/function",
+    args = {
+      value = function() end,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/table",
+    args = {
+      value = {},
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_checker/table/middleclass_object/directly",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_instance_checker/table/middleclass_object/through_inheritance",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassBaseObject,
+    },
+    want = luaunit.assert_true,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_instance_checker(data.args.class)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_instance_or_nil()
+for _, data in ipairs({  
+  {
+    name = "test_is_instance_or_nil/nil",
+    args = {
+      value = nil,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_instance_or_nil/boolean",
+    args = {
+      value = true,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance_or_nil/number/integer",
+    args = {
+      value = 23,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance_or_nil/number/float",
+    args = {
+      value = 2.3,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance_or_nil/string",
+    args = {
+      value = "test",
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance_or_nil/function",
+    args = {
+      value = function() end,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance_or_nil/table",
+    args = {
+      value = {},
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_instance_or_nil/table/middleclass_object/directly",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_instance_or_nil/table/middleclass_object/through_inheritance",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassBaseObject,
+    },
+    want = luaunit.assert_true,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_instance_or_nil(
+      data.args.value,
+      data.args.class
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_instance_or_nil_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_instance_or_nil_checker/nil",
+    args = {
+      value = nil,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/boolean",
+    args = {
+      value = true,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/number/integer",
+    args = {
+      value = 23,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/number/float",
+    args = {
+      value = 2.3,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/string",
+    args = {
+      value = "test",
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/function",
+    args = {
+      value = function() end,
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/table",
+    args = {
+      value = {},
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/table/middleclass_object/directly",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassObject,
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_instance_or_nil_checker/table/middleclass_object/through_inheritance",
+    args = {
+      value = MiddleclassObject:new(),
+      class = MiddleclassBaseObject,
+    },
+    want = luaunit.assert_true,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_instance_or_nil_checker(data.args.class)
 
     luaunit.assert_is_function(checker)
 
