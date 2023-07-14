@@ -87,7 +87,9 @@ function checks.is_callable(value)
   end
 
   local metatable = getmetatable(value)
-  return metatable ~= nil and metatable["__call"] ~= nil
+  return metatable ~= nil
+    and metatable.__call ~= nil
+    and checks.is_callable(metatable.__call)
 end
 
 ---

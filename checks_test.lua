@@ -521,8 +521,17 @@ for _, data in ipairs({
     want = luaunit.assert_false,
   },
   {
-    name = "test_is_callable/table/__call_metamethod",
+    name = "test_is_callable/table/__call_metamethod/function",
     args = { value = Object:new(23) },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_callable/table/__call_metamethod/table",
+    args = {
+      value = (function()
+        return setmetatable({}, { __call = Object:new(23) })
+      end)(),
+    },
     want = luaunit.assert_true,
   },
 }) do
@@ -572,8 +581,17 @@ for _, data in ipairs({
     want = luaunit.assert_false,
   },
   {
-    name = "test_is_callable_or_nil/table/__call_metamethod",
+    name = "test_is_callable_or_nil/table/__call_metamethod/function",
     args = { value = Object:new(23) },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_callable_or_nil/table/__call_metamethod/table",
+    args = {
+      value = (function()
+        return setmetatable({}, { __call = Object:new(23) })
+      end)(),
+    },
     want = luaunit.assert_true,
   },
 }) do
