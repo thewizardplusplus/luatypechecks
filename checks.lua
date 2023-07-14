@@ -1,7 +1,23 @@
 ---
 -- @module checks
 
+local deep_checks = true
+
 local checks = {}
+
+---
+-- @treturn bool
+function checks.get_deep_checks()
+  return deep_checks
+end
+
+---
+-- @tparam bool value
+function checks.set_deep_checks(value)
+  assert(checks.is_boolean(value))
+
+  deep_checks = value
+end
 
 ---
 -- @tparam any value
@@ -114,6 +130,9 @@ function checks.is_table(value, key_checker, value_checker)
   if key_checker == nil and value_checker == nil then
     return true
   end
+  if not deep_checks then
+    return true
+  end
 
   for key, value in pairs(value) do
     if key_checker ~= nil and not key_checker(key) then
@@ -174,6 +193,9 @@ function checks.is_sequence(value, value_checker)
 
   if not checks.is_table(value, checks.is_number, value_checker) then
     return false
+  end
+  if not deep_checks then
+    return true
   end
 
   local indices = {}
