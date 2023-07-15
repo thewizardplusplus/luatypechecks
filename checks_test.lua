@@ -31,22 +31,22 @@ TestChecks = {}
 -- checks.set_global_deep_checks_mode()
 for _, data in ipairs({
   {
-    name = "test_set_global_deep_checks_mode/true",
-    args = { value = true },
-    want = luaunit.assert_true,
+    name = "test_set_global_deep_checks_mode/with_deep_checks",
+    args = { value = "with_deep_checks" },
+    want = "with_deep_checks",
   },
   {
-    name = "test_set_global_deep_checks_mode/false",
-    args = { value = false },
-    want = luaunit.assert_false,
+    name = "test_set_global_deep_checks_mode/without_deep_checks",
+    args = { value = "without_deep_checks" },
+    want = "without_deep_checks",
   },
 }) do
   TestChecks[data.name] = function()
     checks.set_global_deep_checks_mode(data.args.value)
 
     local result = checks.get_global_deep_checks_mode()
-    luaunit.assert_is_boolean(result)
-    data.want(result)
+    luaunit.assert_is_string(result)
+    luaunit.assert_equals(result, data.want)
   end
 end
 
@@ -634,49 +634,49 @@ end
 for _, data in ipairs({
   {
     name = "test_is_table/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table/table",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_table/table/key_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -685,7 +685,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -694,7 +694,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -703,7 +703,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -712,7 +712,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -722,7 +722,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/key_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -732,7 +732,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/value_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -742,7 +742,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -751,7 +751,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -760,7 +760,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -769,7 +769,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -778,7 +778,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -788,7 +788,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/key_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -798,7 +798,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/value_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -808,7 +808,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -818,7 +818,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -828,7 +828,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -838,7 +838,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -848,7 +848,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -859,7 +859,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/key_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -870,7 +870,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table/table/key_and_value_checkers/value_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -902,49 +902,49 @@ end
 for _, data in ipairs({
   {
     name = "test_make_table_checker/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_checker/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_checker/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_checker/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_checker/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_checker/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_checker/table",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_table_checker/table/key_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -953,7 +953,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -962,7 +962,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -971,7 +971,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -980,7 +980,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -990,7 +990,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/key_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1000,7 +1000,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/value_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1010,7 +1010,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1019,7 +1019,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1028,7 +1028,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1037,7 +1037,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1046,7 +1046,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1056,7 +1056,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/key_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1066,7 +1066,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/value_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1076,7 +1076,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1086,7 +1086,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1096,7 +1096,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1106,7 +1106,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1116,7 +1116,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1127,7 +1127,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/key_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1138,7 +1138,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_checker/table/key_and_value_checkers/value_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1173,49 +1173,49 @@ end
 for _, data in ipairs({
   {
     name = "test_is_table_or_nil/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_table_or_nil/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table_or_nil/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table_or_nil/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table_or_nil/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table_or_nil/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_table_or_nil/table",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_table_or_nil/table/key_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1224,7 +1224,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1233,7 +1233,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1242,7 +1242,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1251,7 +1251,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1261,7 +1261,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/key_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1271,7 +1271,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/value_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1281,7 +1281,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1290,7 +1290,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1299,7 +1299,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1308,7 +1308,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1317,7 +1317,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1327,7 +1327,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/key_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1337,7 +1337,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/value_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1347,7 +1347,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1357,7 +1357,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1367,7 +1367,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1377,7 +1377,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1387,7 +1387,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1398,7 +1398,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/key_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1409,7 +1409,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/value_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1441,49 +1441,49 @@ end
 for _, data in ipairs({
   {
     name = "test_make_table_or_nil_checker/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_table_or_nil_checker/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_or_nil_checker/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_or_nil_checker/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_or_nil_checker/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_or_nil_checker/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_table_or_nil_checker/table",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_table_or_nil_checker/table/key_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1492,7 +1492,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1501,7 +1501,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1510,7 +1510,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1519,7 +1519,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1529,7 +1529,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/key_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1539,7 +1539,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/value_checker_false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1549,7 +1549,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1558,7 +1558,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1567,7 +1567,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1576,7 +1576,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1585,7 +1585,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1595,7 +1595,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/key_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1605,7 +1605,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/value_checker_false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1615,7 +1615,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1625,7 +1625,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
@@ -1635,7 +1635,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_number,
@@ -1645,7 +1645,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
@@ -1655,7 +1655,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1666,7 +1666,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/key_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_boolean,
@@ -1677,7 +1677,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_table_or_nil_checker/table/key_and_value_checkers/value_checker_false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       key_checker = checks.is_string,
@@ -1712,55 +1712,55 @@ end
 for _, data in ipairs({
   {
     name = "test_is_sequence/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/table/empty",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence/table/sequence",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {"one", "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence/table/sequence/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -1769,7 +1769,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/sequence/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -1778,25 +1778,25 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/not_sequence/not_integer_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/table/not_sequence/absent_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/table/not_sequence/indices_not_starting_with_one",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence/table/sequence/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -1805,7 +1805,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/sequence/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -1814,25 +1814,25 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/not_sequence/not_integer_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence/table/not_sequence/absent_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence/table/not_sequence/indices_not_starting_with_one/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence/table/sequence/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -1842,7 +1842,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/sequence/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -1852,7 +1852,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/not_sequence/not_integer_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       deep_checks_mode = "without_deep_checks",
@@ -1861,7 +1861,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/not_sequence/absent_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [1] = "one", [3] = "two" },
       deep_checks_mode = "without_deep_checks",
@@ -1870,7 +1870,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence/table/not_sequence/indices_not_starting_with_one/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [2] = "one", [3] = "two"},
       deep_checks_mode = "without_deep_checks",
@@ -1899,55 +1899,55 @@ end
 for _, data in ipairs({
   {
     name = "test_make_sequence_checker/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/table/empty",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_checker/table/sequence",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {"one", "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_checker/table/sequence/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -1956,7 +1956,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/sequence/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -1965,25 +1965,25 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/not_integer_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/absent_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/indices_not_starting_with_one",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_checker/table/sequence/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -1992,7 +1992,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/sequence/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2001,25 +2001,25 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/not_integer_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/absent_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/indices_not_starting_with_one/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_checker/table/sequence/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2029,7 +2029,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/sequence/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2039,7 +2039,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/not_integer_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       deep_checks_mode = "without_deep_checks",
@@ -2048,7 +2048,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/absent_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [1] = "one", [3] = "two" },
       deep_checks_mode = "without_deep_checks",
@@ -2057,7 +2057,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_checker/table/not_sequence/indices_not_starting_with_one/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [2] = "one", [3] = "two"},
       deep_checks_mode = "without_deep_checks",
@@ -2089,55 +2089,55 @@ end
 for _, data in ipairs({
   {
     name = "test_is_sequence_or_nil/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence_or_nil/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/table/empty",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence_or_nil/table/sequence",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {"one", "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence_or_nil/table/sequence/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2146,7 +2146,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/sequence/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2155,25 +2155,25 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/not_integer_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/absent_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/indices_not_starting_with_one",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_false,
   },
   {
     name = "test_is_sequence_or_nil/table/sequence/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2182,7 +2182,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/sequence/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2191,25 +2191,25 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/not_integer_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/absent_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/indices_not_starting_with_one/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_is_sequence_or_nil/table/sequence/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2219,7 +2219,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/sequence/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2229,7 +2229,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/not_integer_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       deep_checks_mode = "without_deep_checks",
@@ -2238,7 +2238,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/absent_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [1] = "one", [3] = "two" },
       deep_checks_mode = "without_deep_checks",
@@ -2247,7 +2247,7 @@ for _, data in ipairs({
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/indices_not_starting_with_one/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [2] = "one", [3] = "two"},
       deep_checks_mode = "without_deep_checks",
@@ -2276,55 +2276,55 @@ end
 for _, data in ipairs({
   {
     name = "test_make_sequence_or_nil_checker/nil",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_or_nil_checker/boolean",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/number/integer",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/number/float",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/string",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/function",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/empty",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = {"one", "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/true",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2333,7 +2333,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/false",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2342,25 +2342,25 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/not_integer_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/absent_indices",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/indices_not_starting_with_one",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_false,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/true/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2369,7 +2369,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/false/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2378,25 +2378,25 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/not_integer_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { one = 1, two = 2 } },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/absent_indices/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/indices_not_starting_with_one/without_deep_checks",
-    global_deep_checks_mode = false,
+    global_deep_checks_mode = "without_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
     want = luaunit.assert_true,
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/true/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_string,
@@ -2406,7 +2406,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/sequence/value_checker/false/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = {"one", "two"},
       value_checker = checks.is_number,
@@ -2416,7 +2416,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/not_integer_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { one = 1, two = 2 },
       deep_checks_mode = "without_deep_checks",
@@ -2425,7 +2425,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/absent_indices/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [1] = "one", [3] = "two" },
       deep_checks_mode = "without_deep_checks",
@@ -2434,7 +2434,7 @@ for _, data in ipairs({
   },
   {
     name = "test_make_sequence_or_nil_checker/table/not_sequence/indices_not_starting_with_one/without_deep_checks/via_parameter",
-    global_deep_checks_mode = true,
+    global_deep_checks_mode = "with_deep_checks",
     args = {
       value = { [2] = "one", [3] = "two"},
       deep_checks_mode = "without_deep_checks",

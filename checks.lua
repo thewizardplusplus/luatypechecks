@@ -1,20 +1,20 @@
 ---
 -- @module checks
 
-local _global_deep_checks_mode = true
+local _global_deep_checks_mode = "with_deep_checks"
 
 local checks = {}
 
 ---
--- @treturn bool
+-- @treturn "without_deep_checks"|"with_deep_checks"
 function checks.get_global_deep_checks_mode()
   return _global_deep_checks_mode
 end
 
 ---
--- @tparam bool value
+-- @tparam "without_deep_checks"|"with_deep_checks" value
 function checks.set_global_deep_checks_mode(value)
-  assert(checks.is_boolean(value))
+  assert(checks.is_enumeration(value, {"without_deep_checks", "with_deep_checks"}))
 
   _global_deep_checks_mode = value
 end
@@ -137,7 +137,7 @@ function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
   if key_checker == nil and value_checker == nil then
     return true
   end
-  if not _global_deep_checks_mode or deep_checks_mode == "without_deep_checks" then
+  if _global_deep_checks_mode == "without_deep_checks" or deep_checks_mode == "without_deep_checks" then
     return true
   end
 
@@ -229,7 +229,7 @@ function checks.is_sequence(value, value_checker, deep_checks_mode)
   if not checks.is_table(value, checks.is_number, value_checker, deep_checks_mode) then
     return false
   end
-  if not _global_deep_checks_mode or deep_checks_mode == "without_deep_checks" then
+  if _global_deep_checks_mode == "without_deep_checks" or deep_checks_mode == "without_deep_checks" then
     return true
   end
 
