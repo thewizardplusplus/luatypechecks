@@ -159,15 +159,6 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn func func(value: any): bool
 function checks.make_table_checker(key_checker, value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(key_checker))
-  assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
-
   return function(value)
     return checks.is_table(value, key_checker, value_checker, deep_checks_mode)
   end
@@ -180,15 +171,6 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_table_or_nil(value, key_checker, value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(key_checker))
-  assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
-
   return checks.is_table(value, key_checker, value_checker, deep_checks_mode) or value == nil
 end
 
@@ -198,15 +180,6 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn func func(value: any): bool
 function checks.make_table_or_nil_checker(key_checker, value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(key_checker))
-  assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
-
   return function(value)
     return checks.is_table_or_nil(value, key_checker, value_checker, deep_checks_mode)
   end
@@ -256,14 +229,6 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn func func(value: any): bool
 function checks.make_sequence_checker(value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
-
   return function(value)
     return checks.is_sequence(value, value_checker, deep_checks_mode)
   end
@@ -275,14 +240,6 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
-
   return checks.is_sequence(value, value_checker, deep_checks_mode) or value == nil
 end
 
@@ -291,14 +248,6 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn func func(value: any): bool
 function checks.make_sequence_or_nil_checker(value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
-
   return function(value)
     return checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
   end
@@ -324,8 +273,6 @@ end
 -- @tparam {any,...} enumeration
 -- @treturn func func(value: any): bool
 function checks.make_enumeration_checker(enumeration)
-  assert(checks.is_sequence(enumeration))
-
   return function(value)
     return checks.is_enumeration(value, enumeration)
   end
@@ -336,8 +283,6 @@ end
 -- @tparam {any,...} enumeration
 -- @treturn bool
 function checks.is_enumeration_or_nil(value, enumeration)
-  assert(checks.is_sequence(enumeration))
-
   return checks.is_enumeration(value, enumeration) or value == nil
 end
 
@@ -345,8 +290,6 @@ end
 -- @tparam {any,...} enumeration
 -- @treturn func func(value: any): bool
 function checks.make_enumeration_or_nil_checker(enumeration)
-  assert(checks.is_sequence(enumeration))
-
   return function(value)
     return checks.is_enumeration_or_nil(value, enumeration)
   end
@@ -368,8 +311,6 @@ end
 -- @tparam tab class a class created by library middleclass
 -- @treturn func func(value: any): bool
 function checks.make_instance_checker(class)
-  assert(checks.is_table(class))
-
   return function(value)
     return checks.is_instance(value, class)
   end
@@ -380,8 +321,6 @@ end
 -- @tparam tab class a class created by library middleclass
 -- @treturn bool
 function checks.is_instance_or_nil(value, class)
-  assert(checks.is_table(class))
-
   return checks.is_instance(value, class) or value == nil
 end
 
@@ -389,8 +328,6 @@ end
 -- @tparam tab class a class created by library middleclass
 -- @treturn func func(value: any): bool
 function checks.make_instance_or_nil_checker(class)
-  assert(checks.is_table(class))
-
   return function(value)
     return checks.is_instance_or_nil(value, class)
   end
