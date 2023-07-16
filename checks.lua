@@ -14,9 +14,25 @@ end
 ---
 -- @tparam "without_deep_checks"|"with_deep_checks" value
 function checks.set_global_deep_checks_mode(value)
-  assert(checks.is_enumeration(value, {"without_deep_checks", "with_deep_checks"}))
+  assert(checks.is_deep_checks_mode(value))
 
   _global_deep_checks_mode = value
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_deep_checks_mode(value)
+  -- we cannot use `checks.is_enumeration()` due to recursion
+  return checks.is_string(value)
+    and (value == "without_deep_checks" or value == "with_deep_checks")
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_deep_checks_mode_or_nil(value)
+  return checks.is_deep_checks_mode(value) or value == nil
 end
 
 ---
@@ -124,10 +140,7 @@ end
 function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
   assert(checks.is_function_or_nil(key_checker))
   assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
+  assert(checks.is_deep_checks_mode_or_nil(deep_checks_mode))
 
   deep_checks_mode = deep_checks_mode or "with_deep_checks"
 
@@ -192,10 +205,7 @@ end
 -- @treturn bool
 function checks.is_sequence(value, value_checker, deep_checks_mode)
   assert(checks.is_function_or_nil(value_checker))
-  -- we cannot use `checks.is_enumeration_or_nil()` due to recursion
-  assert(deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "with_deep_checks"
-    or deep_checks_mode == nil)
+  assert(checks.is_deep_checks_mode_or_nil(deep_checks_mode))
 
   deep_checks_mode = deep_checks_mode or "with_deep_checks"
 

@@ -50,6 +50,118 @@ for _, data in ipairs({
   end
 end
 
+-- checks.is_deep_checks_mode()
+for _, data in ipairs({
+  {
+    name = "test_is_deep_checks_mode/nil",
+    args = { value = nil },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode/string/deep_checks_mode/without_deep_checks",
+    args = { value = "without_deep_checks" },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_deep_checks_mode/string/deep_checks_mode/with_deep_checks",
+    args = { value = "with_deep_checks" },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_deep_checks_mode/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_deep_checks_mode(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.is_deep_checks_mode_or_nil()
+for _, data in ipairs({
+  {
+    name = "test_is_deep_checks_mode_or_nil/nil",
+    args = { value = nil },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/boolean",
+    args = { value = true },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/number/integer",
+    args = { value = 23 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/number/float",
+    args = { value = 2.3 },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/string",
+    args = { value = "test" },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/string/deep_checks_mode/without_deep_checks",
+    args = { value = "without_deep_checks" },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/string/deep_checks_mode/with_deep_checks",
+    args = { value = "with_deep_checks" },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/function",
+    args = { value = function() end },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_is_deep_checks_mode_or_nil/table",
+    args = { value = {} },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.is_deep_checks_mode_or_nil(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
 -- checks.is_boolean()
 for _, data in ipairs({
   {
