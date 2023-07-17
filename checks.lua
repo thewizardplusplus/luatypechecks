@@ -138,11 +138,11 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
+  deep_checks_mode = deep_checks_mode or "with_deep_checks"
+
   assert(checks.is_function_or_nil(key_checker))
   assert(checks.is_function_or_nil(value_checker))
-  assert(checks.is_deep_checks_mode_or_nil(deep_checks_mode))
-
-  deep_checks_mode = deep_checks_mode or "with_deep_checks"
+  assert(checks.is_deep_checks_mode(deep_checks_mode))
 
   if type(value) ~= "table" then
     return false
@@ -204,10 +204,10 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_sequence(value, value_checker, deep_checks_mode)
-  assert(checks.is_function_or_nil(value_checker))
-  assert(checks.is_deep_checks_mode_or_nil(deep_checks_mode))
-
   deep_checks_mode = deep_checks_mode or "with_deep_checks"
+
+  assert(checks.is_function_or_nil(value_checker))
+  assert(checks.is_deep_checks_mode(deep_checks_mode))
 
   if not checks.is_table(value, checks.is_number, value_checker, deep_checks_mode) then
     return false
@@ -342,5 +342,8 @@ function checks.make_instance_or_nil_checker(class)
     return checks.is_instance_or_nil(value, class)
   end
 end
+
+-- we cannot check right away because at that moment the check function isn't defined
+assert(checks.is_deep_checks_mode(_global_deep_checks_mode))
 
 return checks
