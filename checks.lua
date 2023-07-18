@@ -1,3 +1,5 @@
+-- luacheck: no max comment line length
+
 ---
 -- @module checks
 
@@ -150,11 +152,12 @@ function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
   if key_checker == nil and value_checker == nil then
     return true
   end
-  if _global_deep_checks_mode == "without_deep_checks" or deep_checks_mode == "without_deep_checks" then
+  if _global_deep_checks_mode == "without_deep_checks"
+    or deep_checks_mode == "without_deep_checks" then
     return true
   end
 
-  for key, value in pairs(value) do
+  for key, value in pairs(value) do -- luacheck: no redefined
     if key_checker ~= nil and not key_checker(key) then
       return false
     end
@@ -183,8 +186,14 @@ end
 -- @tparam[optchain] func value_checker func(value: any): bool
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
-function checks.is_table_or_nil(value, key_checker, value_checker, deep_checks_mode)
-  return checks.is_table(value, key_checker, value_checker, deep_checks_mode) or value == nil
+function checks.is_table_or_nil(
+  value,
+  key_checker,
+  value_checker,
+  deep_checks_mode
+)
+  return checks.is_table(value, key_checker, value_checker, deep_checks_mode)
+    or value == nil
 end
 
 ---
@@ -192,9 +201,18 @@ end
 -- @tparam[optchain] func value_checker func(value: any): bool
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn func func(value: any): bool
-function checks.make_table_or_nil_checker(key_checker, value_checker, deep_checks_mode)
+function checks.make_table_or_nil_checker(
+  key_checker,
+  value_checker,
+  deep_checks_mode
+)
   return function(value)
-    return checks.is_table_or_nil(value, key_checker, value_checker, deep_checks_mode)
+    return checks.is_table_or_nil(
+      value,
+      key_checker,
+      value_checker,
+      deep_checks_mode
+    )
   end
 end
 
@@ -209,10 +227,16 @@ function checks.is_sequence(value, value_checker, deep_checks_mode)
   assert(checks.is_function_or_nil(value_checker))
   assert(checks.is_deep_checks_mode(deep_checks_mode))
 
-  if not checks.is_table(value, checks.is_number, value_checker, deep_checks_mode) then
+  if not checks.is_table(
+    value,
+    checks.is_number,
+    value_checker,
+    deep_checks_mode
+  ) then
     return false
   end
-  if _global_deep_checks_mode == "without_deep_checks" or deep_checks_mode == "without_deep_checks" then
+  if _global_deep_checks_mode == "without_deep_checks"
+    or deep_checks_mode == "without_deep_checks" then
     return true
   end
 
@@ -250,7 +274,8 @@ end
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
-  return checks.is_sequence(value, value_checker, deep_checks_mode) or value == nil
+  return checks.is_sequence(value, value_checker, deep_checks_mode)
+    or value == nil
 end
 
 ---
@@ -343,7 +368,8 @@ function checks.make_instance_or_nil_checker(class)
   end
 end
 
--- we cannot check right away because at that moment the check function isn't defined
+-- we cannot check right away because at that moment the check function
+-- isn't defined
 assert(checks.is_deep_checks_mode(_global_deep_checks_mode))
 
 return checks
