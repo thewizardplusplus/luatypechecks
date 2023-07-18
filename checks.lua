@@ -135,8 +135,8 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func key_checker func(value: any): bool
--- @tparam[optchain] func value_checker func(value: any): bool
+-- @tparam[opt] func key_checker `func(value: any): bool`
+-- @tparam[optchain] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
@@ -170,10 +170,10 @@ function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
 end
 
 ---
--- @tparam[opt] func key_checker func(value: any): bool
--- @tparam[optchain] func value_checker func(value: any): bool
+-- @tparam[opt] func key_checker `func(value: any): bool`
+-- @tparam[optchain] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
--- @treturn func func(value: any): bool
+-- @treturn func `func(value: any): bool`
 function checks.make_table_checker(key_checker, value_checker, deep_checks_mode)
   return function(value)
     return checks.is_table(value, key_checker, value_checker, deep_checks_mode)
@@ -182,8 +182,8 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func key_checker func(value: any): bool
--- @tparam[optchain] func value_checker func(value: any): bool
+-- @tparam[opt] func key_checker `func(value: any): bool`
+-- @tparam[optchain] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_table_or_nil(
@@ -197,10 +197,10 @@ function checks.is_table_or_nil(
 end
 
 ---
--- @tparam[opt] func key_checker func(value: any): bool
--- @tparam[optchain] func value_checker func(value: any): bool
+-- @tparam[opt] func key_checker `func(value: any): bool`
+-- @tparam[optchain] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
--- @treturn func func(value: any): bool
+-- @treturn func `func(value: any): bool`
 function checks.make_table_or_nil_checker(
   key_checker,
   value_checker,
@@ -218,7 +218,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func value_checker func(value: any): bool
+-- @tparam[opt] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_sequence(value, value_checker, deep_checks_mode)
@@ -259,9 +259,9 @@ function checks.is_sequence(value, value_checker, deep_checks_mode)
 end
 
 ---
--- @tparam[opt] func value_checker func(value: any): bool
+-- @tparam[opt] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
--- @treturn func func(value: any): bool
+-- @treturn func `func(value: any): bool`
 function checks.make_sequence_checker(value_checker, deep_checks_mode)
   return function(value)
     return checks.is_sequence(value, value_checker, deep_checks_mode)
@@ -270,7 +270,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func value_checker func(value: any): bool
+-- @tparam[opt] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
@@ -279,9 +279,9 @@ function checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
 end
 
 ---
--- @tparam[opt] func value_checker func(value: any): bool
+-- @tparam[opt] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
--- @treturn func func(value: any): bool
+-- @treturn func `func(value: any): bool`
 function checks.make_sequence_or_nil_checker(value_checker, deep_checks_mode)
   return function(value)
     return checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
@@ -306,7 +306,7 @@ end
 
 ---
 -- @tparam {any,...} enumeration
--- @treturn func func(value: any): bool
+-- @treturn func `func(value: any): bool`
 function checks.make_enumeration_checker(enumeration)
   return function(value)
     return checks.is_enumeration(value, enumeration)
@@ -323,7 +323,7 @@ end
 
 ---
 -- @tparam {any,...} enumeration
--- @treturn func func(value: any): bool
+-- @treturn func `func(value: any): bool`
 function checks.make_enumeration_or_nil_checker(enumeration)
   return function(value)
     return checks.is_enumeration_or_nil(value, enumeration)
@@ -332,7 +332,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam tab class a class created by library middleclass
+-- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function checks.is_instance(value, class)
   assert(checks.is_table(class))
@@ -343,8 +343,8 @@ function checks.is_instance(value, class)
 end
 
 ---
--- @tparam tab class a class created by library middleclass
--- @treturn func func(value: any): bool
+-- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
+-- @treturn func `func(value: any): bool`
 function checks.make_instance_checker(class)
   return function(value)
     return checks.is_instance(value, class)
@@ -353,15 +353,15 @@ end
 
 ---
 -- @tparam any value
--- @tparam tab class a class created by library middleclass
+-- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function checks.is_instance_or_nil(value, class)
   return checks.is_instance(value, class) or value == nil
 end
 
 ---
--- @tparam tab class a class created by library middleclass
--- @treturn func func(value: any): bool
+-- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
+-- @treturn func `func(value: any): bool`
 function checks.make_instance_or_nil_checker(class)
   return function(value)
     return checks.is_instance_or_nil(value, class)
