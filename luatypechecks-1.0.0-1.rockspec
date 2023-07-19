@@ -2,6 +2,7 @@ rockspec_format = "3.0"
 package = "luatypechecks"
 version = "1.0.0-1"
 description = {
+  summary = "The library that implements various type checks in order to simulate static typing in the Lua language.",
   license = "MIT",
   maintainer = "thewizardplusplus <thewizardplusplus@yandex.ru>",
   homepage = "https://github.com/thewizardplusplus/luatypechecks",
