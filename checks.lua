@@ -152,8 +152,7 @@ function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
   if key_checker == nil and value_checker == nil then
     return true
   end
-  if _global_deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "without_deep_checks" then
+  if checks._without_deep_checks(deep_checks_mode) then
     return true
   end
 
@@ -235,8 +234,7 @@ function checks.is_sequence(value, value_checker, deep_checks_mode)
   ) then
     return false
   end
-  if _global_deep_checks_mode == "without_deep_checks"
-    or deep_checks_mode == "without_deep_checks" then
+  if checks._without_deep_checks(deep_checks_mode) then
     return true
   end
 
@@ -366,6 +364,13 @@ function checks.make_instance_or_nil_checker(class)
   return function(value)
     return checks.is_instance_or_nil(value, class)
   end
+end
+
+function checks._without_deep_checks(deep_checks_mode)
+  assert(checks.is_deep_checks_mode(deep_checks_mode))
+
+  return _global_deep_checks_mode == "without_deep_checks"
+    or deep_checks_mode == "without_deep_checks"
 end
 
 -- we cannot check right away because at that moment the check function
