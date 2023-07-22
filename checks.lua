@@ -26,8 +26,7 @@ end
 -- @treturn bool
 function checks.is_deep_checks_mode(value)
   -- we cannot use `checks.is_enumeration()` due to recursion
-  return checks.is_string(value)
-    and (value == "without_deep_checks" or value == "with_deep_checks")
+  return value == "without_deep_checks" or value == "with_deep_checks"
 end
 
 ---
@@ -35,6 +34,20 @@ end
 -- @treturn bool
 function checks.is_deep_checks_mode_or_nil(value)
   return checks.is_deep_checks_mode(value) or value == nil
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_assertions_mode(value)
+  return checks.is_enumeration(value, {"without_assertions", "with_assertions"})
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function checks.is_assertions_mode_or_nil(value)
+  return checks.is_assertions_mode(value) or value == nil
 end
 
 ---

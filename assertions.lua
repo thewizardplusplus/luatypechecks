@@ -22,6 +22,20 @@ end
 ---
 -- @tparam any value
 -- @treturn bool
+function assertions.is_assertions_mode(value)
+  assert(checks.is_assertions_mode(value))
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function assertions.is_assertions_mode_or_nil(value)
+  assert(checks.is_assertions_mode_or_nil(value))
+end
+
+---
+-- @tparam any value
+-- @treturn bool
 function assertions.is_boolean(value)
   assert(checks.is_boolean(value))
 end
