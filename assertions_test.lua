@@ -33,6 +33,28 @@ local MiddleclassObject = middleclass("MiddleclassObject", MiddleclassBaseObject
 -- luacheck: globals TestAssertions
 TestAssertions = {}
 
+-- assertions.set_assertions_mode()
+for _, data in ipairs({
+  {
+    name = "test_set_assertions_mode/with_assertions",
+    args = { value = "with_assertions" },
+    want = "with_assertions",
+  },
+  {
+    name = "test_set_assertions_mode/without_assertions",
+    args = { value = "without_assertions" },
+    want = "without_assertions",
+  },
+}) do
+  TestAssertions[data.name] = function()
+    assertions.set_assertions_mode(data.args.value)
+
+    local result = assertions.get_assertions_mode()
+    luaunit.assert_is_string(result)
+    luaunit.assert_equals(result, data.want)
+  end
+end
+
 -- assertions.is_deep_checks_mode()
 for _, data in ipairs({
   {

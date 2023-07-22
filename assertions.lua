@@ -3,7 +3,23 @@ local checks = require("luatypechecks.checks")
 ---
 -- @module assertions
 
+local _assertions_mode = "with_assertions"
+
 local assertions = {}
+
+---
+-- @treturn "without_assertions"|"with_assertions"
+function assertions.get_assertions_mode()
+  return _assertions_mode
+end
+
+---
+-- @tparam "without_assertions"|"with_assertions" value
+function assertions.set_assertions_mode(value)
+  assertions.is_assertions_mode(value)
+
+  _assertions_mode = value
+end
 
 ---
 -- @tparam any value
@@ -186,5 +202,8 @@ end
 function assertions.is_instance_or_nil(value, class)
   assert(checks.is_instance_or_nil(value, class))
 end
+
+-- we cannot check right away because at that moment the check function isn't defined
+assertions.is_assertions_mode(_assertions_mode)
 
 return assertions
