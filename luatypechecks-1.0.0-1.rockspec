@@ -23,6 +23,8 @@ build = {
   modules = {
     ["checks"] = "checks.lua",
     ["checks_test"] = "checks_test.lua",
+    ["assertions"] = "assertions.lua",
+    ["assertions_test"] = "assertions_test.lua",
     ["test"] = "test.lua",
   },
   copy_directories = {
