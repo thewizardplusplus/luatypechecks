@@ -45,7 +45,8 @@ for _, data in ipairs({
   },
 }) do
   TestChecks[data.name] = function()
-    local previous_global_deep_checks_mode = checks.get_global_deep_checks_mode()
+    local previous_global_deep_checks_mode =
+      checks.get_global_deep_checks_mode()
     checks.set_global_deep_checks_mode(data.args.value)
 
     local result = checks.get_global_deep_checks_mode()
@@ -258,12 +259,16 @@ for _, data in ipairs({
     want = luaunit.assert_false,
   },
   {
-    name = "test_is_assertions_mode_or_nil/string/assertions_mode/without_assertions",
+    name = "test_is_assertions_mode_or_nil"
+      .. "/string"
+      .. "/assertions_mode/without_assertions",
     args = { value = "without_assertions" },
     want = luaunit.assert_true,
   },
   {
-    name = "test_is_assertions_mode_or_nil/string/assertions_mode/with_assertions",
+    name = "test_is_assertions_mode_or_nil"
+      .. "/string"
+      .. "/assertions_mode/with_assertions",
     args = { value = "with_assertions" },
     want = luaunit.assert_true,
   },

@@ -386,8 +386,7 @@ function checks._without_deep_checks(deep_checks_mode)
     or deep_checks_mode == "without_deep_checks"
 end
 
--- we cannot check right away because at that moment the check function
--- isn't defined
+-- we cannot check right away because at that moment the check function isn't defined
 assert(checks.is_deep_checks_mode(_global_deep_checks_mode))
 
 return checks

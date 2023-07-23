@@ -1,3 +1,5 @@
+-- luacheck: no max comment line length
+
 local checks = require("luatypechecks.checks")
 
 ---
@@ -27,7 +29,7 @@ function assertions.set_assertions_mode(value)
       goto end_of_iteration
     end
 
-    local value = _assertions_backup[key]
+    local value = _assertions_backup[key] -- luacheck: no redefined
     if _assertions_mode == "without_assertions" then
       value = function() end
     end
@@ -156,7 +158,12 @@ end
 -- @tparam[optchain] func value_checker func(value: any): bool
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
-function assertions.is_table(value, key_checker, value_checker, deep_checks_mode)
+function assertions.is_table(
+  value,
+  key_checker,
+  value_checker,
+  deep_checks_mode
+)
   assert(checks.is_table(value, key_checker, value_checker, deep_checks_mode))
 end
 
@@ -166,8 +173,18 @@ end
 -- @tparam[optchain] func value_checker func(value: any): bool
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
-function assertions.is_table_or_nil(value, key_checker, value_checker, deep_checks_mode)
-  assert(checks.is_table_or_nil(value, key_checker, value_checker, deep_checks_mode))
+function assertions.is_table_or_nil(
+  value,
+  key_checker,
+  value_checker,
+  deep_checks_mode
+)
+  assert(checks.is_table_or_nil(
+    value,
+    key_checker,
+    value_checker,
+    deep_checks_mode
+  ))
 end
 
 ---
