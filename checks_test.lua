@@ -45,11 +45,14 @@ for _, data in ipairs({
   },
 }) do
   TestChecks[data.name] = function()
+    local previous_global_deep_checks_mode = checks.get_global_deep_checks_mode()
     checks.set_global_deep_checks_mode(data.args.value)
 
     local result = checks.get_global_deep_checks_mode()
     luaunit.assert_is_string(result)
     luaunit.assert_equals(result, data.want)
+
+    checks.set_global_deep_checks_mode(previous_global_deep_checks_mode)
   end
 end
 

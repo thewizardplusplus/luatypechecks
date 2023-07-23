@@ -47,11 +47,14 @@ for _, data in ipairs({
   },
 }) do
   TestAssertions[data.name] = function()
+    local previous_assertions_mode = assertions.get_assertions_mode()
     assertions.set_assertions_mode(data.args.value)
 
     local result = assertions.get_assertions_mode()
     luaunit.assert_is_string(result)
     luaunit.assert_equals(result, data.want)
+
+    assertions.set_assertions_mode(previous_assertions_mode)
   end
 end
 
