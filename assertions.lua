@@ -6,6 +6,7 @@ local checks = require("luatypechecks.checks")
 local _assertions_mode = "with_assertions"
 
 local assertions = {}
+local _assertions_backup = {}
 
 ---
 -- @treturn "without_assertions"|"with_assertions"
@@ -19,6 +20,22 @@ function assertions.set_assertions_mode(value)
   assertions.is_assertions_mode(value)
 
   _assertions_mode = value
+
+  -- switch on/off functions that start with "is_"
+  for key, _ in pairs(_assertions_backup) do
+    if not string.match(key, "^is_") then
+      goto end_of_iteration
+    end
+
+    local value = _assertions_backup[key]
+    if _assertions_mode == "without_assertions" then
+      value = function() end
+    end
+
+    assertions[key] = value
+
+    ::end_of_iteration::
+  end
 end
 
 ---
@@ -205,5 +222,10 @@ end
 
 -- we cannot check right away because at that moment the check function isn't defined
 assertions.is_assertions_mode(_assertions_mode)
+
+-- after filling module `assertions`, we make a backup of it
+for key, value in pairs(assertions) do
+  _assertions_backup[key] = value
+end
 
 return assertions
