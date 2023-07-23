@@ -1,9 +1,9 @@
 -- luacheck: no max comment line length
 
-local checks = require("luatypechecks.checks")
-
 ---
 -- @module assertions
+
+local checks = require("luatypechecks.checks")
 
 local _assertions_mode = "with_assertions"
 
@@ -154,8 +154,8 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func key_checker func(value: any): bool
--- @tparam[optchain] func value_checker func(value: any): bool
+-- @tparam[opt] func key_checker `func(value: any): bool`
+-- @tparam[optchain] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function assertions.is_table(
@@ -169,8 +169,8 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func key_checker func(value: any): bool
--- @tparam[optchain] func value_checker func(value: any): bool
+-- @tparam[opt] func key_checker `func(value: any): bool`
+-- @tparam[optchain] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function assertions.is_table_or_nil(
@@ -189,7 +189,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func value_checker func(value: any): bool
+-- @tparam[opt] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function assertions.is_sequence(value, value_checker, deep_checks_mode)
@@ -198,7 +198,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam[opt] func value_checker func(value: any): bool
+-- @tparam[opt] func value_checker `func(value: any): bool`
 -- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
 -- @treturn bool
 function assertions.is_sequence_or_nil(value, value_checker, deep_checks_mode)
@@ -223,7 +223,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam tab class a class created by library middleclass
+-- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function assertions.is_instance(value, class)
   assert(checks.is_instance(value, class))
@@ -231,7 +231,7 @@ end
 
 ---
 -- @tparam any value
--- @tparam tab class a class created by library middleclass
+-- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function assertions.is_instance_or_nil(value, class)
   assert(checks.is_instance_or_nil(value, class))
