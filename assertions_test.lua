@@ -2341,6 +2341,262 @@ for _, data in ipairs({
   end
 end
 
+-- assertions.has_metamethods()
+for _, data in ipairs({
+  {
+    name = "test_has_metamethods/nil",
+    args = {
+      value = nil,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/boolean",
+    args = {
+      value = true,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/number/integer",
+    args = {
+      value = 23,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/number/float",
+    args = {
+      value = 2.3,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/string",
+    args = {
+      value = "test",
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods/function",
+    args = {
+      value = function() end,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/table/without_metatable",
+    args = {
+      value = {},
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/table/without_metamethods",
+    args = {
+      value = (function()
+        return setmetatable({}, {})
+      end)(),
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods/table/with_metamethods/functions",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {"__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods/table/with_metamethods/tables",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = Object:new(23),
+          __call = Object:new(42),
+        })
+      end)(),
+      metamethod_names = {"__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods/table/with_missed_metamethods/all",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {"__add", "__sub"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods/table/with_missed_metamethods/some",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {"__eq", "__add"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_metamethods,
+        data.args.value,
+        data.args.metamethod_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
+-- assertions.has_metamethods_or_is_nil()
+for _, data in ipairs({
+  {
+    name = "test_has_metamethods_or_is_nil/nil",
+    args = {
+      value = nil,
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/boolean",
+    args = {
+      value = true,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/number/integer",
+    args = {
+      value = 23,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/number/float",
+    args = {
+      value = 2.3,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/string",
+    args = {
+      value = "test",
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/function",
+    args = {
+      value = function() end,
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/table/without_metatable",
+    args = {
+      value = {},
+      metamethod_names = {},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/table/without_metamethods",
+    args = {
+      value = (function()
+        return setmetatable({}, {})
+      end)(),
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/table/with_metamethods/functions",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {"__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/table/with_metamethods/tables",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = Object:new(23),
+          __call = Object:new(42),
+        })
+      end)(),
+      metamethod_names = {"__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/table/with_missed_metamethods/all",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {"__add", "__sub"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_metamethods_or_is_nil/table/with_missed_metamethods/some",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {"__eq", "__add"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_metamethods_or_is_nil,
+        data.args.value,
+        data.args.metamethod_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
 -- assertions.is_instance()
 for _, data in ipairs({
   {

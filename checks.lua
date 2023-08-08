@@ -129,14 +129,7 @@ end
 -- @tparam any value
 -- @treturn bool
 function checks.is_callable(value)
-  if checks.is_function(value) then
-    return true
-  end
-
-  local metatable = getmetatable(value)
-  return metatable ~= nil
-    and metatable.__call ~= nil
-    and checks.is_callable(metatable.__call)
+  return checks.is_function(value) or checks.has_metamethods(value, {"__call"})
 end
 
 ---
@@ -338,6 +331,54 @@ end
 function checks.make_enumeration_or_nil_checker(enumeration)
   return function(value)
     return checks.is_enumeration_or_nil(value, enumeration)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} metamethod_names
+-- @treturn bool
+function checks.has_metamethods(value, metamethod_names)
+  assert(checks.is_sequence(metamethod_names, checks.is_string))
+
+  local metatable = getmetatable(value)
+  if metatable == nil then
+    return false
+  end
+
+  for _, metamethod_name in ipairs(metamethod_names) do
+    local metamethod_instance = metatable[metamethod_name]
+    if metamethod_instance == nil or not checks.is_callable(metamethod_instance) then
+      return false
+    end
+  end
+
+  return true
+end
+
+---
+-- @tparam {string,...} metamethod_names
+-- @treturn func `func(value: any): bool`
+function checks.make_metamethods_checker(metamethod_names)
+  return function(value)
+    return checks.has_metamethods(value, metamethod_names)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} metamethod_names
+-- @treturn bool
+function checks.has_metamethods_or_is_nil(value, metamethod_names)
+  return checks.has_metamethods(value, metamethod_names) or value == nil
+end
+
+---
+-- @tparam {string,...} metamethod_names
+-- @treturn func `func(value: any): bool`
+function checks.make_metamethods_or_nil_checker(metamethod_names)
+  return function(value)
+    return checks.has_metamethods_or_is_nil(value, metamethod_names)
   end
 end
 

@@ -23,9 +23,9 @@ function assertions.set_assertions_mode(value)
 
   _assertions_mode = value
 
-  -- switch on/off functions that start with "is_"
+  -- switch on/off functions that start with "is_" or "has_"
   for key, _ in pairs(_assertions_backup) do
-    if not string.match(key, "^is_") then
+    if not string.match(key, "^is_") and not string.match(key, "^has_") then
       goto end_of_iteration
     end
 
@@ -219,6 +219,22 @@ end
 -- @treturn bool
 function assertions.is_enumeration_or_nil(value, enumeration)
   assert(checks.is_enumeration_or_nil(value, enumeration))
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} metamethod_names
+-- @treturn bool
+function assertions.has_metamethods(value, metamethod_names)
+  assert(checks.has_metamethods(value, metamethod_names))
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} metamethod_names
+-- @treturn bool
+function assertions.has_metamethods_or_is_nil(value, metamethod_names)
+  assert(checks.has_metamethods_or_is_nil(value, metamethod_names))
 end
 
 ---
