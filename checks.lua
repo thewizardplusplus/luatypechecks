@@ -384,6 +384,49 @@ end
 
 ---
 -- @tparam any value
+-- @tparam {string,...} method_names
+-- @treturn bool
+function checks.has_methods(value, method_names)
+  assert(checks.is_sequence(method_names, checks.is_string))
+
+  for _, method_name in ipairs(method_names) do
+    local method_instance = value[method_name]
+    if method_instance == nil or not checks.is_callable(method_instance) then
+      return false
+    end
+  end
+
+  return true
+end
+
+---
+-- @tparam {string,...} method_names
+-- @treturn func `func(value: any): bool`
+function checks.make_methods_checker(method_names)
+  return function(value)
+    return checks.has_methods(value, method_names)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} method_names
+-- @treturn bool
+function checks.has_methods_or_is_nil(value, method_names)
+  return checks.has_methods(value, method_names) or value == nil
+end
+
+---
+-- @tparam {string,...} method_names
+-- @treturn func `func(value: any): bool`
+function checks.make_methods_or_nil_checker(method_names)
+  return function(value)
+    return checks.has_methods_or_is_nil(value, method_names)
+  end
+end
+
+---
+-- @tparam any value
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function checks.is_instance(value, class)

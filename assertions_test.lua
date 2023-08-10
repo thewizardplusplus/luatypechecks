@@ -2597,6 +2597,314 @@ for _, data in ipairs({
   end
 end
 
+-- assertions.has_methods()
+for _, data in ipairs({
+  {
+    name = "test_has_methods/nil",
+    args = {
+      value = nil,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/boolean",
+    args = {
+      value = true,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/number/integer",
+    args = {
+      value = 23,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/number/float",
+    args = {
+      value = 2.3,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/string",
+    args = {
+      value = "test",
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/function",
+    args = {
+      value = function() end,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/table/empty",
+    args = {
+      value = {},
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/table/with_non-callable_values",
+    args = {
+      value = { one = 23, two = 42 },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods/table/with_callable_values/functions",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/table/with_callable_values/tables",
+    args = {
+      value = {
+        one = Object:new(23),
+        two = Object:new(42),
+      },
+      method_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods/table/with_metamethods/functions",
+    args = {
+      value = Object:new(23),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods/table/with_metamethods/tables",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = Object:new(23),
+          __call = Object:new(42),
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods/table/with_missed_methods/all",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods/table/with_missed_methods/some",
+    args = {
+      value = {
+        one = function() end,
+        three = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_methods,
+        data.args.value,
+        data.args.method_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
+-- assertions.has_methods_or_is_nil()
+for _, data in ipairs({
+  {
+    name = "test_has_methods_or_is_nil/nil",
+    args = {
+      value = nil,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/boolean",
+    args = {
+      value = true,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/number/integer",
+    args = {
+      value = 23,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/number/float",
+    args = {
+      value = 2.3,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/string",
+    args = {
+      value = "test",
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/function",
+    args = {
+      value = function() end,
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/empty",
+    args = {
+      value = {},
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_non-callable_values",
+    args = {
+      value = { one = 23, two = 42 },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_callable_values/functions",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_callable_values/tables",
+    args = {
+      value = {
+        one = Object:new(23),
+        two = Object:new(42),
+      },
+      method_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_metamethods/functions",
+    args = {
+      value = Object:new(23),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_metamethods/tables",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = Object:new(23),
+          __call = Object:new(42),
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_missed_methods/all",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_missed_methods/some",
+    args = {
+      value = {
+        one = function() end,
+        three = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_methods_or_is_nil,
+        data.args.value,
+        data.args.method_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
 -- assertions.is_instance()
 for _, data in ipairs({
   {

@@ -239,6 +239,22 @@ end
 
 ---
 -- @tparam any value
+-- @tparam {string,...} method_names
+-- @treturn bool
+function assertions.has_methods(value, method_names)
+  assert(checks.has_methods(value, method_names))
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} method_names
+-- @treturn bool
+function assertions.has_methods_or_is_nil(value, method_names)
+  assert(checks.has_methods_or_is_nil(value, method_names))
+end
+
+---
+-- @tparam any value
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function assertions.is_instance(value, class)
