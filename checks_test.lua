@@ -4458,6 +4458,882 @@ for _, data in ipairs({
   end
 end
 
+-- checks.has_methods_anywhere()
+for _, data in ipairs({
+  {
+    name = "test_has_methods_anywhere/nil",
+    args = {
+      value = nil,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/boolean",
+    args = {
+      value = true,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/number/integer",
+    args = {
+      value = 23,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/number/float",
+    args = {
+      value = 2.3,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/string",
+    args = {
+      value = "test",
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/function",
+    args = {
+      value = function() end,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/table/empty",
+    args = {
+      value = {},
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_methods",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_methods/with_underscores",
+    args = {
+      value = {
+        __one = function() end,
+        __two = function() end,
+      },
+      method_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_methods/missed",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_metamethods",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = function() end,
+          __call = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_metamethods/without_underscores",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          eq = function() end,
+          call = function() end,
+        })
+      end)(),
+      method_names = {"eq", "call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_metamethods/missed",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __add = function() end,
+          __sub = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_and_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_regular_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_all_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.has_methods_anywhere(
+      data.args.value,
+      data.args.method_names
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_methods_anywhere_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_methods_anywhere_checker/nil",
+    args = {
+      value = nil,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/boolean",
+    args = {
+      value = true,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/number/integer",
+    args = {
+      value = 23,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/number/float",
+    args = {
+      value = 2.3,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/string",
+    args = {
+      value = "test",
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/function",
+    args = {
+      value = function() end,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/empty",
+    args = {
+      value = {},
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_methods",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_methods/with_underscores",
+    args = {
+      value = {
+        __one = function() end,
+        __two = function() end,
+      },
+      method_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_methods/missed",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_metamethods",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = function() end,
+          __call = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_metamethods/without_underscores",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          eq = function() end,
+          call = function() end,
+        })
+      end)(),
+      method_names = {"eq", "call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_metamethods/missed",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __add = function() end,
+          __sub = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods/with_missed_regular_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods/with_missed_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods/with_missed_all_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_methods_anywhere_checker(data.args.method_names)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.has_methods_anywhere_or_is_nil()
+for _, data in ipairs({
+  {
+    name = "test_has_methods_anywhere_or_is_nil/nil",
+    args = {
+      value = nil,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/boolean",
+    args = {
+      value = true,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/number/integer",
+    args = {
+      value = 23,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/number/float",
+    args = {
+      value = 2.3,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/string",
+    args = {
+      value = "test",
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/function",
+    args = {
+      value = function() end,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/empty",
+    args = {
+      value = {},
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods/with_underscores",
+    args = {
+      value = {
+        __one = function() end,
+        __two = function() end,
+      },
+      method_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods/missed",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = function() end,
+          __call = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods/without_underscores",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          eq = function() end,
+          call = function() end,
+        })
+      end)(),
+      method_names = {"eq", "call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods/missed",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __add = function() end,
+          __sub = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_regular_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_all_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.has_methods_anywhere_or_is_nil(
+      data.args.value,
+      data.args.method_names
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_methods_anywhere_or_nil_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/nil",
+    args = {
+      value = nil,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/boolean",
+    args = {
+      value = true,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/number/integer",
+    args = {
+      value = 23,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/number/float",
+    args = {
+      value = 2.3,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/string",
+    args = {
+      value = "test",
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/function",
+    args = {
+      value = function() end,
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/empty",
+    args = {
+      value = {},
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_methods",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_methods/with_underscores",
+    args = {
+      value = {
+        __one = function() end,
+        __two = function() end,
+      },
+      method_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_methods/missed",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      method_names = {"one", "two"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_metamethods",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __eq = function() end,
+          __call = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_metamethods/without_underscores",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          eq = function() end,
+          call = function() end,
+        })
+      end)(),
+      method_names = {"eq", "call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_metamethods/missed",
+    args = {
+      value = (function()
+        return setmetatable({}, {
+          __add = function() end,
+          __sub = function() end,
+        })
+      end)(),
+      method_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods/with_missed_regular_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __eq = function() end,
+            __call = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods/with_missed_metamethods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            one = function() end,
+            two = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods/with_missed_all_methods",
+    args = {
+      value = (function()
+        return setmetatable(
+          {
+            three = function() end,
+            four = function() end,
+          },
+          {
+            __add = function() end,
+            __sub = function() end,
+          }
+        )
+      end)(),
+      method_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_methods_anywhere_or_nil_checker(
+      data.args.method_names
+    )
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
 -- checks.is_instance()
 for _, data in ipairs({
   {

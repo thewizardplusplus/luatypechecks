@@ -427,6 +427,53 @@ end
 
 ---
 -- @tparam any value
+-- @tparam {string,...} method_names
+-- @treturn bool
+function checks.has_methods_anywhere(value, method_names)
+  assert(checks.is_sequence(method_names, checks.is_string))
+
+  local metamethod_names = {}
+  local regular_method_names = {}
+  for _, method_name in ipairs(method_names) do
+    if string.match(method_name, "^__") then
+      table.insert(metamethod_names, method_name)
+    else
+      table.insert(regular_method_names, method_name)
+    end
+  end
+
+  return (#metamethod_names == 0 or checks.has_metamethods(value, metamethod_names))
+    and checks.has_methods(value, regular_method_names)
+end
+
+---
+-- @tparam {string,...} method_names
+-- @treturn func `func(value: any): bool`
+function checks.make_methods_anywhere_checker(method_names)
+  return function(value)
+    return checks.has_methods_anywhere(value, method_names)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} method_names
+-- @treturn bool
+function checks.has_methods_anywhere_or_is_nil(value, method_names)
+  return checks.has_methods_anywhere(value, method_names) or value == nil
+end
+
+---
+-- @tparam {string,...} method_names
+-- @treturn func `func(value: any): bool`
+function checks.make_methods_anywhere_or_nil_checker(method_names)
+  return function(value)
+    return checks.has_methods_anywhere_or_is_nil(value, method_names)
+  end
+end
+
+---
+-- @tparam any value
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
 function checks.is_instance(value, class)
