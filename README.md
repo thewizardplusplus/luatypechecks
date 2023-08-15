@@ -19,11 +19,17 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
     - `checks.is_table(value[, key_checker[, value_checker[, deep_checks_mode="with_deep_checks"]]])`:
       - `checks.is_sequence(value[, value_checker[, deep_checks_mode="with_deep_checks"]])`;
     - `checks.is_enumeration(value, enumeration)`;
+    - `checks.has_metamethods(value, metamethod_names)`;
+    - `checks.has_methods(value, method_names)`;
+    - `checks.has_methods_anywhere(value, method_names)`;
     - `checks.is_instance(value, class)`;
   - for each check:
-    - there is a variant that allows the value `nil` &mdash; `checks.is_*_or_nil(value, ...)`;
-    - if the check accepts additional parameters, there is a constructor that creates a closure with these parameters (i.e., performs currying) &mdash; `checks.make_*_checker(value, ...)`;
+    - there is a variant that allows the value `nil` &mdash; `checks.is_*_or_nil(value, ...)` / `checks.has_*_or_is_nil(value, ...)`;
+    - if the check accepts additional parameters, there is a constructor that creates a closure with these parameters (i.e., performs currying) &mdash; `checks.make_*_checker(...)`;
 - asserting:
+  - assertions:
+    - `assertions.is_true(value)`;
+    - `assertions.is_false(value)`;
   - for each check, there is a variant wrapped in an `assert()` function call &mdash; see package `assertions`;
 - optimization:
   - it's possible to disable checking of table key types and table value types:
