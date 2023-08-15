@@ -796,9 +796,7 @@ for _, data in ipairs({
   {
     name = "test_is_callable/table/__call_metamethod/table",
     args = {
-      value = (function()
-        return setmetatable({}, { __call = Object:new(23) })
-      end)(),
+      value = setmetatable({}, { __call = Object:new(23) }),
     },
     want = luaunit.assert_true,
   },
@@ -856,9 +854,7 @@ for _, data in ipairs({
   {
     name = "test_is_callable_or_nil/table/__call_metamethod/table",
     args = {
-      value = (function()
-        return setmetatable({}, { __call = Object:new(23) })
-      end)(),
+      value = setmetatable({}, { __call = Object:new(23) }),
     },
     want = luaunit.assert_true,
   },
@@ -3471,9 +3467,7 @@ for _, data in ipairs({
   {
     name = "test_has_metamethods/table/without_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {})
-      end)(),
+      value = setmetatable({}, {}),
       metamethod_names = {},
     },
     want = luaunit.assert_true,
@@ -3489,12 +3483,10 @@ for _, data in ipairs({
   {
     name = "test_has_metamethods/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       metamethod_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -3588,9 +3580,7 @@ for _, data in ipairs({
   {
     name = "test_make_metamethods_checker/table/without_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {})
-      end)(),
+      value = setmetatable({}, {}),
       metamethod_names = {},
     },
     want = luaunit.assert_true,
@@ -3606,12 +3596,10 @@ for _, data in ipairs({
   {
     name = "test_make_metamethods_checker/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       metamethod_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -3706,9 +3694,7 @@ for _, data in ipairs({
   {
     name = "test_has_metamethods_or_is_nil/table/without_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {})
-      end)(),
+      value = setmetatable({}, {}),
       metamethod_names = {},
     },
     want = luaunit.assert_true,
@@ -3724,12 +3710,10 @@ for _, data in ipairs({
   {
     name = "test_has_metamethods_or_is_nil/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       metamethod_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -3823,9 +3807,7 @@ for _, data in ipairs({
   {
     name = "test_make_metamethods_or_nil_checker/table/without_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {})
-      end)(),
+      value = setmetatable({}, {}),
       metamethod_names = {},
     },
     want = luaunit.assert_true,
@@ -3841,12 +3823,10 @@ for _, data in ipairs({
   {
     name = "test_make_metamethods_or_nil_checker/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       metamethod_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -3981,12 +3961,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4124,12 +4102,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_checker/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4268,12 +4244,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_or_is_nil/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4411,12 +4385,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_or_nil_checker/table/with_metamethods/tables",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = Object:new(23),
-          __call = Object:new(42),
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4552,12 +4524,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = function() end,
-          __call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = function() end,
+        __call = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -4565,12 +4535,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_metamethods/without_underscores",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          eq = function() end,
-          call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        eq = function() end,
+        call = function() end,
+      }),
       method_names = {"eq", "call"},
     },
     want = luaunit.assert_false,
@@ -4578,12 +4546,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_metamethods/missed",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __add = function() end,
-          __sub = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __add = function() end,
+        __sub = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4591,18 +4557,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_regular_and_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -4610,18 +4574,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_regular_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4629,18 +4591,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4648,18 +4608,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_all_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4770,12 +4728,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = function() end,
-          __call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = function() end,
+        __call = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -4783,12 +4739,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_metamethods/without_underscores",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          eq = function() end,
-          call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        eq = function() end,
+        call = function() end,
+      }),
       method_names = {"eq", "call"},
     },
     want = luaunit.assert_false,
@@ -4796,12 +4750,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_metamethods/missed",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __add = function() end,
-          __sub = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __add = function() end,
+        __sub = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4809,18 +4761,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -4828,18 +4778,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods/with_missed_regular_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4847,18 +4795,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods/with_missed_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4866,18 +4812,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_checker/table/with_regular_and_metamethods/with_missed_all_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -4989,12 +4933,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = function() end,
-          __call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = function() end,
+        __call = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -5002,12 +4944,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods/without_underscores",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          eq = function() end,
-          call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        eq = function() end,
+        call = function() end,
+      }),
       method_names = {"eq", "call"},
     },
     want = luaunit.assert_false,
@@ -5015,12 +4955,10 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods/missed",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __add = function() end,
-          __sub = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __add = function() end,
+        __sub = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5028,18 +4966,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -5047,18 +4983,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_regular_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5066,18 +5000,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5085,18 +5017,16 @@ for _, data in ipairs({
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_all_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5207,12 +5137,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_metamethods",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __eq = function() end,
-          __call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __eq = function() end,
+        __call = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -5220,12 +5148,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_metamethods/without_underscores",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          eq = function() end,
-          call = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        eq = function() end,
+        call = function() end,
+      }),
       method_names = {"eq", "call"},
     },
     want = luaunit.assert_false,
@@ -5233,12 +5159,10 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_metamethods/missed",
     args = {
-      value = (function()
-        return setmetatable({}, {
-          __add = function() end,
-          __sub = function() end,
-        })
-      end)(),
+      value = setmetatable({}, {
+        __add = function() end,
+        __sub = function() end,
+      }),
       method_names = {"__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5246,18 +5170,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_true,
@@ -5265,18 +5187,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods/with_missed_regular_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __eq = function() end,
-            __call = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5284,18 +5204,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods/with_missed_metamethods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            one = function() end,
-            two = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
@@ -5303,18 +5221,16 @@ for _, data in ipairs({
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/with_regular_and_metamethods/with_missed_all_methods",
     args = {
-      value = (function()
-        return setmetatable(
-          {
-            three = function() end,
-            four = function() end,
-          },
-          {
-            __add = function() end,
-            __sub = function() end,
-          }
-        )
-      end)(),
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
