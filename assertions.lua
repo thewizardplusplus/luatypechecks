@@ -71,6 +71,20 @@ end
 ---
 -- @tparam any value
 -- @treturn bool
+function assertions.is_true(value)
+  assert(value)
+end
+
+---
+-- @tparam any value
+-- @treturn bool
+function assertions.is_false(value)
+  assert(not value)
+end
+
+---
+-- @tparam any value
+-- @treturn bool
 function assertions.is_boolean(value)
   assert(checks.is_boolean(value))
 end

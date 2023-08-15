@@ -335,6 +335,68 @@ for _, data in ipairs({
   end
 end
 
+-- assertions.is_true()
+for _, data in ipairs({
+  {
+    name = "test_is_true/false",
+    args = { value = false },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_is_true/true",
+    args = { value = true },
+    want = _assert_no_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(assertions.is_true, data.args.value)
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
+-- assertions.is_false()
+for _, data in ipairs({
+  {
+    name = "test_is_false/false",
+    args = { value = false },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_is_false/true",
+    args = { value = true },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(assertions.is_false, data.args.value)
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
 -- assertions.is_boolean()
 for _, data in ipairs({
   {
