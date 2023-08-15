@@ -7,13 +7,13 @@ local _global_deep_checks_mode = "with_deep_checks"
 
 local checks = {}
 
----
+--- ⚠️. Checks if the key and value checkers are ignored or not in the @{is_table|is_table()} and @{is_sequence|is_sequence()} functions.
 -- @treturn "without_deep_checks"|"with_deep_checks"
 function checks.get_global_deep_checks_mode()
   return _global_deep_checks_mode
 end
 
----
+--- ⚠️. Set whether or not to ignore the key and value checkers in the @{is_table|is_table()} and @{is_sequence|is_sequence()} functions.
 -- @tparam "without_deep_checks"|"with_deep_checks" value
 function checks.set_global_deep_checks_mode(value)
   assert(checks.is_deep_checks_mode(value))
@@ -21,7 +21,7 @@ function checks.set_global_deep_checks_mode(value)
   _global_deep_checks_mode = value
 end
 
----
+--- ⚠️. Checks that the value is "without\_deep\_checks" or "with\_deep\_checks".
 -- @tparam any value
 -- @treturn bool
 function checks.is_deep_checks_mode(value)
@@ -29,21 +29,21 @@ function checks.is_deep_checks_mode(value)
   return value == "without_deep_checks" or value == "with_deep_checks"
 end
 
----
+--- ⚠️. Checks that the value is "without\_deep\_checks", "with\_deep\_checks", or nil.
 -- @tparam any value
 -- @treturn bool
 function checks.is_deep_checks_mode_or_nil(value)
   return checks.is_deep_checks_mode(value) or value == nil
 end
 
----
+--- ⚠️. Checks that the value is "without\_assertions" or "with\_assertions".
 -- @tparam any value
 -- @treturn bool
 function checks.is_assertions_mode(value)
   return checks.is_enumeration(value, {"without_assertions", "with_assertions"})
 end
 
----
+--- ⚠️. Checks that the value is "without\_assertions", "with\_assertions", or nil.
 -- @tparam any value
 -- @treturn bool
 function checks.is_assertions_mode_or_nil(value)
@@ -78,7 +78,7 @@ function checks.is_number_or_nil(value)
   return checks.is_number(value) or value == nil
 end
 
----
+--- ⚠️. Checks that the value is a number and equals to its integral part. Note that it doesn't use the @{math.type|math.type()} function from Lua 5.3.
 -- @tparam any value
 -- @treturn bool
 function checks.is_integer(value)
@@ -90,7 +90,7 @@ function checks.is_integer(value)
   return value == value_integral_part
 end
 
----
+--- ⚠️. Checks that the value is a number and equals to its integral part or is nil. Note that it doesn't use the @{math.type|math.type()} function from Lua 5.3.
 -- @tparam any value
 -- @treturn bool
 function checks.is_integer_or_nil(value)
@@ -143,7 +143,7 @@ end
 -- @tparam any value
 -- @tparam[opt] func key_checker `func(value: any): bool`
 -- @tparam[optchain] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the key and value checkers
 -- @treturn bool
 function checks.is_table(value, key_checker, value_checker, deep_checks_mode)
   deep_checks_mode = deep_checks_mode or "with_deep_checks"
@@ -177,7 +177,7 @@ end
 ---
 -- @tparam[opt] func key_checker `func(value: any): bool`
 -- @tparam[optchain] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the key and value checkers
 -- @treturn func `func(value: any): bool`
 function checks.make_table_checker(key_checker, value_checker, deep_checks_mode)
   return function(value)
@@ -189,7 +189,7 @@ end
 -- @tparam any value
 -- @tparam[opt] func key_checker `func(value: any): bool`
 -- @tparam[optchain] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the key and value checkers
 -- @treturn bool
 function checks.is_table_or_nil(
   value,
@@ -204,7 +204,7 @@ end
 ---
 -- @tparam[opt] func key_checker `func(value: any): bool`
 -- @tparam[optchain] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the key and value checkers
 -- @treturn func `func(value: any): bool`
 function checks.make_table_or_nil_checker(
   key_checker,
@@ -224,7 +224,7 @@ end
 ---
 -- @tparam any value
 -- @tparam[opt] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the value checker
 -- @treturn bool
 function checks.is_sequence(value, value_checker, deep_checks_mode)
   deep_checks_mode = deep_checks_mode or "with_deep_checks"
@@ -264,7 +264,7 @@ end
 
 ---
 -- @tparam[opt] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the value checker
 -- @treturn func `func(value: any): bool`
 function checks.make_sequence_checker(value_checker, deep_checks_mode)
   return function(value)
@@ -275,7 +275,7 @@ end
 ---
 -- @tparam any value
 -- @tparam[opt] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the value checker
 -- @treturn bool
 function checks.is_sequence_or_nil(value, value_checker, deep_checks_mode)
   return checks.is_sequence(value, value_checker, deep_checks_mode)
@@ -284,7 +284,7 @@ end
 
 ---
 -- @tparam[opt] func value_checker `func(value: any): bool`
--- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode
+-- @tparam[optchain="with_deep_checks"] "without_deep_checks"|"with_deep_checks" deep_checks_mode ignore or not the value checker
 -- @treturn func `func(value: any): bool`
 function checks.make_sequence_or_nil_checker(value_checker, deep_checks_mode)
   return function(value)
@@ -383,7 +383,7 @@ function checks.make_metamethods_or_nil_checker(metamethod_names)
   end
 end
 
----
+--- ⚠️. Checks that the value has the specified methods. Note that it tries to get methods by regular indexing, it doesn't touch the value metatable.
 -- @tparam any value
 -- @tparam {string,...} method_names
 -- @treturn bool
@@ -400,7 +400,7 @@ function checks.has_methods(value, method_names)
   return true
 end
 
----
+--- ⚠️. Creates a closure that checks that the value has the specified methods. Note that it tries to get methods by regular indexing, it doesn't touch the value metatable.
 -- @tparam {string,...} method_names
 -- @treturn func `func(value: any): bool`
 function checks.make_methods_checker(method_names)
@@ -409,7 +409,7 @@ function checks.make_methods_checker(method_names)
   end
 end
 
----
+--- ⚠️. Checks that the value has the specified methods or is nil. Note that it tries to get methods by regular indexing, it doesn't touch the value metatable.
 -- @tparam any value
 -- @tparam {string,...} method_names
 -- @treturn bool
@@ -417,7 +417,7 @@ function checks.has_methods_or_is_nil(value, method_names)
   return checks.has_methods(value, method_names) or value == nil
 end
 
----
+--- ⚠️. Creates a closure that checks that the value has the specified methods or is nil. Note that it tries to get methods by regular indexing, it doesn't touch the value metatable.
 -- @tparam {string,...} method_names
 -- @treturn func `func(value: any): bool`
 function checks.make_methods_or_nil_checker(method_names)
@@ -426,7 +426,7 @@ function checks.make_methods_or_nil_checker(method_names)
   end
 end
 
----
+--- ⚠️. Unions the @{has_metamethods|has_metamethods()} and @{has_methods|has_methods()} functions. The method names are separated by prefix: if a method name starts with two underscores, it's passed to the @{has_metamethods|has_metamethods()} function, otherwise to the @{has_methods|has_methods()} function.
 -- @tparam any value
 -- @tparam {string,...} method_names
 -- @treturn bool
@@ -448,7 +448,7 @@ function checks.has_methods_anywhere(value, method_names)
     and checks.has_methods(value, regular_method_names)
 end
 
----
+--- ⚠️. Unions the @{make_metamethods_checker|make_metamethods_checker()} and @{make_methods_checker|make_methods_checker()} functions. The method names are separated by prefix: if a method name starts with two underscores, it's passed to the @{make_metamethods_checker|make_metamethods_checker()} function, otherwise to the @{make_methods_checker|make_methods_checker()} function.
 -- @tparam {string,...} method_names
 -- @treturn func `func(value: any): bool`
 function checks.make_methods_anywhere_checker(method_names)
@@ -457,7 +457,7 @@ function checks.make_methods_anywhere_checker(method_names)
   end
 end
 
----
+--- ⚠️. Unions the @{has_metamethods_or_is_nil|has_metamethods_or_is_nil()} and @{has_methods_or_is_nil|has_methods_or_is_nil()} functions. The method names are separated by prefix: if a method name starts with two underscores, it's passed to the @{has_metamethods_or_is_nil|has_metamethods_or_is_nil()} function, otherwise to the @{has_methods_or_is_nil|has_methods_or_is_nil()} function.
 -- @tparam any value
 -- @tparam {string,...} method_names
 -- @treturn bool
@@ -465,7 +465,7 @@ function checks.has_methods_anywhere_or_is_nil(value, method_names)
   return checks.has_methods_anywhere(value, method_names) or value == nil
 end
 
----
+--- ⚠️. Unions the @{make_metamethods_or_nil_checker|make_metamethods_or_nil_checker()} and @{make_methods_or_nil_checker|make_methods_or_nil_checker()} functions. The method names are separated by prefix: if a method name starts with two underscores, it's passed to the @{make_metamethods_or_nil_checker|make_metamethods_or_nil_checker()} function, otherwise to the @{make_methods_or_nil_checker|make_methods_or_nil_checker()} function.
 -- @tparam {string,...} method_names
 -- @treturn func `func(value: any): bool`
 function checks.make_methods_anywhere_or_nil_checker(method_names)
@@ -474,7 +474,7 @@ function checks.make_methods_anywhere_or_nil_checker(method_names)
   end
 end
 
----
+--- ⚠️. Checks that the value is an instance of a class created by library [middleclass](https://github.com/kikito/middleclass).
 -- @tparam any value
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
@@ -486,7 +486,7 @@ function checks.is_instance(value, class)
     and value:isInstanceOf(class)
 end
 
----
+--- ⚠️. Creates a closure that checks that the value is an instance of a class created by library [middleclass](https://github.com/kikito/middleclass).
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn func `func(value: any): bool`
 function checks.make_instance_checker(class)
@@ -495,7 +495,7 @@ function checks.make_instance_checker(class)
   end
 end
 
----
+--- ⚠️. Checks that the value is an instance of a class created by library [middleclass](https://github.com/kikito/middleclass) or is nil.
 -- @tparam any value
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn bool
@@ -503,7 +503,7 @@ function checks.is_instance_or_nil(value, class)
   return checks.is_instance(value, class) or value == nil
 end
 
----
+--- ⚠️. Creates a closure that checks that the value is an instance of a class created by library [middleclass](https://github.com/kikito/middleclass) or is nil.
 -- @tparam tab class a class created by library [middleclass](https://github.com/kikito/middleclass)
 -- @treturn func `func(value: any): bool`
 function checks.make_instance_or_nil_checker(class)
