@@ -3021,7 +3021,9 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_anywhere/table/with_regular_methods/with_underscores",
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_regular_methods/with_underscores",
     args = {
       value = {
         __one = function() end,
@@ -3054,7 +3056,9 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_anywhere/table/with_metamethods/without_underscores",
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_metamethods/without_underscores",
     args = {
       value = setmetatable({}, {
         eq = function() end,
@@ -3093,7 +3097,9 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_regular_methods",
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metamethods/with_missed_regular_methods",
     args = {
       value = setmetatable(
         {
@@ -3110,7 +3116,9 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_metamethods",
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metamethods/with_missed_metamethods",
     args = {
       value = setmetatable(
         {
@@ -3127,7 +3135,9 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_anywhere/table/with_regular_and_metamethods/with_missed_all_methods",
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metamethods/with_missed_all_methods",
     args = {
       value = setmetatable(
         {
@@ -3236,7 +3246,9 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods/with_underscores",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_methods/with_underscores",
     args = {
       value = {
         __one = function() end,
@@ -3247,7 +3259,9 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods/missed",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_methods/missed",
     args = {
       value = {
         three = function() end,
@@ -3269,7 +3283,9 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods/without_underscores",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_metamethods/without_underscores",
     args = {
       value = setmetatable({}, {
         eq = function() end,
@@ -3291,7 +3307,9 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metamethods",
     args = {
       value = setmetatable(
         {
@@ -3308,7 +3326,9 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_regular_methods",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metamethods/with_missed_regular_methods",
     args = {
       value = setmetatable(
         {
@@ -3325,7 +3345,9 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_metamethods",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metamethods/with_missed_metamethods",
     args = {
       value = setmetatable(
         {
@@ -3342,7 +3364,9 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_anywhere_or_is_nil/table/with_regular_and_metamethods/with_missed_all_methods",
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metamethods/with_missed_all_methods",
     args = {
       value = setmetatable(
         {

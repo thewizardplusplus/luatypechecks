@@ -348,7 +348,8 @@ function checks.has_metamethods(value, metamethod_names)
 
   for _, metamethod_name in ipairs(metamethod_names) do
     local metamethod_instance = metatable[metamethod_name]
-    if metamethod_instance == nil or not checks.is_callable(metamethod_instance) then
+    if metamethod_instance == nil
+      or not checks.is_callable(metamethod_instance) then
       return false
     end
   end
@@ -442,7 +443,8 @@ function checks.has_methods_anywhere(value, method_names)
     end
   end
 
-  return (#metamethod_names == 0 or checks.has_metamethods(value, metamethod_names))
+  return (#metamethod_names == 0
+    or checks.has_metamethods(value, metamethod_names))
     and checks.has_methods(value, regular_method_names)
 end
 

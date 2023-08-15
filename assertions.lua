@@ -24,17 +24,16 @@ function assertions.set_assertions_mode(value)
   _assertions_mode = value
 
   -- switch on/off functions that start with "is_" or "has_"
-  for key, _ in pairs(_assertions_backup) do
+  for key, value in pairs(_assertions_backup) do -- luacheck: no redefined
     if not string.match(key, "^is_") and not string.match(key, "^has_") then
       goto end_of_iteration
     end
 
-    local value = _assertions_backup[key] -- luacheck: no redefined
-    if _assertions_mode == "without_assertions" then
-      value = function() end
+    if _assertions_mode == "with_assertions" then
+      assertions[key] = value
+    else
+      assertions[key] = function() end
     end
-
-    assertions[key] = value
 
     ::end_of_iteration::
   end
