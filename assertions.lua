@@ -236,6 +236,22 @@ end
 
 ---
 -- @tparam any value
+-- @tparam {string,...} metaproperty_names
+-- @raise "assertion failed!"
+function assertions.has_metaproperties(value, metaproperty_names)
+  assert(checks.has_metaproperties(value, metaproperty_names))
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} metaproperty_names
+-- @raise "assertion failed!"
+function assertions.has_metaproperties_or_is_nil(value, metaproperty_names)
+  assert(checks.has_metaproperties_or_is_nil(value, metaproperty_names))
+end
+
+---
+-- @tparam any value
 -- @tparam {string,...} metamethod_names
 -- @raise "assertion failed!"
 function assertions.has_metamethods(value, metamethod_names)

@@ -336,6 +336,54 @@ end
 
 ---
 -- @tparam any value
+-- @tparam {string,...} metaproperty_names
+-- @treturn bool
+function checks.has_metaproperties(value, metaproperty_names)
+  assert(checks.is_sequence(metaproperty_names, checks.is_string))
+
+  local metatable = getmetatable(value)
+  if metatable == nil then
+    return false
+  end
+
+  for _, metaproperty_name in ipairs(metaproperty_names) do
+    local metaproperty_instance = metatable[metaproperty_name]
+    if metaproperty_instance == nil then
+      return false
+    end
+  end
+
+  return true
+end
+
+---
+-- @tparam {string,...} metaproperty_names
+-- @treturn func `func(value: any): bool`
+function checks.make_metaproperties_checker(metaproperty_names)
+  return function(value)
+    return checks.has_metaproperties(value, metaproperty_names)
+  end
+end
+
+---
+-- @tparam any value
+-- @tparam {string,...} metaproperty_names
+-- @treturn bool
+function checks.has_metaproperties_or_is_nil(value, metaproperty_names)
+  return checks.has_metaproperties(value, metaproperty_names) or value == nil
+end
+
+---
+-- @tparam {string,...} metaproperty_names
+-- @treturn func `func(value: any): bool`
+function checks.make_metaproperties_or_nil_checker(metaproperty_names)
+  return function(value)
+    return checks.has_metaproperties_or_is_nil(value, metaproperty_names)
+  end
+end
+
+---
+-- @tparam any value
 -- @tparam {string,...} metamethod_names
 -- @treturn bool
 function checks.has_metamethods(value, metamethod_names)

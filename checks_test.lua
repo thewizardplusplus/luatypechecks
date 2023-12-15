@@ -3406,6 +3406,510 @@ for _, data in ipairs({
   end
 end
 
+-- checks.has_metaproperties()
+for _, data in ipairs({
+  {
+    name = "test_has_metaproperties/nil",
+    args = {
+      value = nil,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/boolean",
+    args = {
+      value = true,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/number/integer",
+    args = {
+      value = 23,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/number/float",
+    args = {
+      value = 2.3,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/string",
+    args = {
+      value = "test",
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties/function",
+    args = {
+      value = function() end,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/table/without_metatable",
+    args = {
+      value = {},
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/table/without_metaproperties",
+    args = {
+      value = setmetatable({}, {}),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties/table/with_metaproperties/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      metaproperty_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties/table/with_metaproperties/with_callable_values/functions",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties/table/with_metaproperties/with_callable_values/tables",
+    args = {
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties/table/with_missed_metaproperties/all",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__add", "__sub"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties/table/with_missed_metaproperties/some",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__add"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.has_metaproperties(
+      data.args.value,
+      data.args.metaproperty_names
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_metaproperties_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_metaproperties_checker/nil",
+    args = {
+      value = nil,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/boolean",
+    args = {
+      value = true,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/number/integer",
+    args = {
+      value = 23,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/number/float",
+    args = {
+      value = 2.3,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/string",
+    args = {
+      value = "test",
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_checker/function",
+    args = {
+      value = function() end,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/without_metatable",
+    args = {
+      value = {},
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/without_metaproperties",
+    args = {
+      value = setmetatable({}, {}),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/with_metaproperties/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      metaproperty_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/with_metaproperties/with_callable_values/functions",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/with_metaproperties/with_callable_values/tables",
+    args = {
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/with_missed_metaproperties/all",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__add", "__sub"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker/table/with_missed_metaproperties/some",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__add"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_metaproperties_checker(data.args.metaproperty_names)
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.has_metaproperties_or_is_nil()
+for _, data in ipairs({
+  {
+    name = "test_has_metaproperties_or_is_nil/nil",
+    args = {
+      value = nil,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/boolean",
+    args = {
+      value = true,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/number/integer",
+    args = {
+      value = 23,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/number/float",
+    args = {
+      value = 2.3,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/string",
+    args = {
+      value = "test",
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/function",
+    args = {
+      value = function() end,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/without_metatable",
+    args = {
+      value = {},
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/without_metaproperties",
+    args = {
+      value = setmetatable({}, {}),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/with_metaproperties/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      metaproperty_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/with_metaproperties/with_callable_values/functions",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/with_metaproperties/with_callable_values/tables",
+    args = {
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/with_missed_metaproperties/all",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__add", "__sub"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil/table/with_missed_metaproperties/some",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__add"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local result = checks.has_metaproperties_or_is_nil(
+      data.args.value,
+      data.args.metaproperty_names
+    )
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
+-- checks.make_metaproperties_or_nil_checker()
+for _, data in ipairs({
+  {
+    name = "test_make_metaproperties_or_nil_checker/nil",
+    args = {
+      value = nil,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/boolean",
+    args = {
+      value = true,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/number/integer",
+    args = {
+      value = 23,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/number/float",
+    args = {
+      value = 2.3,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/string",
+    args = {
+      value = "test",
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/function",
+    args = {
+      value = function() end,
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/table/without_metatable",
+    args = {
+      value = {},
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/table/without_metaproperties",
+    args = {
+      value = setmetatable({}, {}),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/table/with_metaproperties/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      metaproperty_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/table/with_metaproperties/with_callable_values/functions",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker/table/with_metaproperties/with_callable_values/tables",
+    args = {
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
+      metaproperty_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_true,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker"
+      .. "/table"
+      .. "/with_missed_metaproperties/all",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__add", "__sub"},
+    },
+    want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker"
+      .. "/table"
+      .. "/with_missed_metaproperties/some",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {"__eq", "__add"},
+    },
+    want = luaunit.assert_false,
+  },
+}) do
+  TestChecks[data.name] = function()
+    local checker = checks.make_metaproperties_or_nil_checker(
+      data.args.metaproperty_names
+    )
+
+    luaunit.assert_is_function(checker)
+
+    local result = checker(data.args.value)
+
+    luaunit.assert_is_boolean(result)
+    data.want(result)
+  end
+end
+
 -- checks.has_metamethods()
 for _, data in ipairs({
   {
