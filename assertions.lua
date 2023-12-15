@@ -250,6 +250,22 @@ function assertions.has_metaproperties_or_is_nil(value, metaproperty_names)
   assert(checks.has_metaproperties_or_is_nil(value, metaproperty_names))
 end
 
+--- ⚠️. Checks that the value has the specified properties. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @raise "assertion failed!"
+function assertions.has_properties(value, property_names)
+  assert(checks.has_properties(value, property_names))
+end
+
+--- ⚠️. Checks that the value has the specified properties or is nil. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @raise "assertion failed!"
+function assertions.has_properties_or_is_nil(value, property_names)
+  assert(checks.has_properties_or_is_nil(value, property_names))
+end
+
 ---
 -- @tparam any value
 -- @tparam {string,...} metamethod_names

@@ -2669,6 +2669,332 @@ for _, data in ipairs({
   end
 end
 
+-- assertions.has_properties()
+for _, data in ipairs({
+  {
+    name = "test_has_properties/nil",
+    args = {
+      value = nil,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/boolean",
+    args = {
+      value = true,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/number/integer",
+    args = {
+      value = 23,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/number/float",
+    args = {
+      value = 2.3,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/string",
+    args = {
+      value = "test",
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/function",
+    args = {
+      value = function() end,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/table/empty",
+    args = {
+      value = {},
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/table/with_non-callable_values",
+    args = {
+      value = { one = 23, two = 42 },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/table/with_callable_values/functions",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/table/with_callable_values/tables",
+    args = {
+      value = {
+        one = Object:new(23),
+        two = Object:new(42),
+      },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties/table/with_metaproperties/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      property_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties/table/with_metaproperties/with_callable_values/functions",
+    args = {
+      value = Object:new(23),
+      property_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties/table/with_metaproperties/with_callable_values/tables",
+    args = {
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
+      property_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties/table/with_missed_properties/all",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties/table/with_missed_properties/some",
+    args = {
+      value = {
+        one = function() end,
+        three = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_properties,
+        data.args.value,
+        data.args.property_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
+-- assertions.has_properties_or_is_nil()
+for _, data in ipairs({
+  {
+    name = "test_has_properties_or_is_nil/nil",
+    args = {
+      value = nil,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/boolean",
+    args = {
+      value = true,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/number/integer",
+    args = {
+      value = 23,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/number/float",
+    args = {
+      value = 2.3,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/string",
+    args = {
+      value = "test",
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/function",
+    args = {
+      value = function() end,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/empty",
+    args = {
+      value = {},
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_non-callable_values",
+    args = {
+      value = { one = 23, two = 42 },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_callable_values/functions",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_callable_values/tables",
+    args = {
+      value = {
+        one = Object:new(23),
+        two = Object:new(42),
+      },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_metaproperties/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      property_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_metaproperties/with_callable_values/functions",
+    args = {
+      value = Object:new(23),
+      property_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_metaproperties/with_callable_values/tables",
+    args = {
+      value = setmetatable({}, {
+        __eq = Object:new(23),
+        __call = Object:new(42),
+      }),
+      property_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_missed_properties/all",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_or_is_nil/table/with_missed_properties/some",
+    args = {
+      value = {
+        one = function() end,
+        three = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_properties_or_is_nil,
+        data.args.value,
+        data.args.property_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
 -- assertions.has_metamethods()
 for _, data in ipairs({
   {

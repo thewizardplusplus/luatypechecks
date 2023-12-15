@@ -382,6 +382,49 @@ function checks.make_metaproperties_or_nil_checker(metaproperty_names)
   end
 end
 
+--- ⚠️. Checks that the value has the specified properties. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @treturn bool
+function checks.has_properties(value, property_names)
+  assert(checks.is_sequence(property_names, checks.is_string))
+
+  for _, property_name in ipairs(property_names) do
+    local property_instance = value[property_name]
+    if property_instance == nil then
+      return false
+    end
+  end
+
+  return true
+end
+
+--- ⚠️. Creates a closure that checks that the value has the specified properties. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
+-- @tparam {string,...} property_names
+-- @treturn func `func(value: any): bool`
+function checks.make_properties_checker(property_names)
+  return function(value)
+    return checks.has_properties(value, property_names)
+  end
+end
+
+--- ⚠️. Checks that the value has the specified properties or is nil. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @treturn bool
+function checks.has_properties_or_is_nil(value, property_names)
+  return checks.has_properties(value, property_names) or value == nil
+end
+
+--- ⚠️. Creates a closure that checks that the value has the specified properties or is nil. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
+-- @tparam {string,...} property_names
+-- @treturn func `func(value: any): bool`
+function checks.make_properties_or_nil_checker(property_names)
+  return function(value)
+    return checks.has_properties_or_is_nil(value, property_names)
+  end
+end
+
 ---
 -- @tparam any value
 -- @tparam {string,...} metamethod_names
