@@ -266,6 +266,22 @@ function assertions.has_properties_or_is_nil(value, property_names)
   assert(checks.has_properties_or_is_nil(value, property_names))
 end
 
+--- ⚠️. Unions the @{has_metaproperties|has_metaproperties()} and @{has_properties|has_properties()} functions. The property names are separated by prefix: if a property name starts with two underscores, it's passed to the @{has_metaproperties|has_metaproperties()} function, otherwise to the @{has_properties|has_properties()} function.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @raise "assertion failed!"
+function assertions.has_properties_anywhere(value, property_names)
+  assert(checks.has_properties_anywhere(value, property_names))
+end
+
+--- ⚠️. Unions the @{has_metaproperties_or_is_nil|has_metaproperties_or_is_nil()} and @{has_properties_or_is_nil|has_properties_or_is_nil()} functions. The property names are separated by prefix: if a property name starts with two underscores, it's passed to the @{has_metaproperties_or_is_nil|has_metaproperties_or_is_nil()} function, otherwise to the @{has_properties_or_is_nil|has_properties_or_is_nil()} function.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @raise "assertion failed!"
+function assertions.has_properties_anywhere_or_is_nil(value, property_names)
+  assert(checks.has_properties_anywhere_or_is_nil(value, property_names))
+end
+
 ---
 -- @tparam any value
 -- @tparam {string,...} metamethod_names

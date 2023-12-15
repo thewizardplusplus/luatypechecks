@@ -2995,6 +2995,460 @@ for _, data in ipairs({
   end
 end
 
+-- assertions.has_properties_anywhere()
+for _, data in ipairs({
+  {
+    name = "test_has_properties_anywhere/nil",
+    args = {
+      value = nil,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/boolean",
+    args = {
+      value = true,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/number/integer",
+    args = {
+      value = 23,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/number/float",
+    args = {
+      value = 2.3,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/string",
+    args = {
+      value = "test",
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/function",
+    args = {
+      value = function() end,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/table/empty",
+    args = {
+      value = {},
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere/table/with_regular_properties",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_regular_properties/with_underscores",
+    args = {
+      value = {
+        __one = function() end,
+        __two = function() end,
+      },
+      property_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere/table/with_regular_properties/missed",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere/table/with_metaproperties",
+    args = {
+      value = setmetatable({}, {
+        __eq = function() end,
+        __call = function() end,
+      }),
+      property_names = {"__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_metaproperties/without_underscores",
+    args = {
+      value = setmetatable({}, {
+        eq = function() end,
+        call = function() end,
+      }),
+      property_names = {"eq", "call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere/table/with_metaproperties/missed",
+    args = {
+      value = setmetatable({}, {
+        __add = function() end,
+        __sub = function() end,
+      }),
+      property_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere/table/with_regular_and_metaproperties",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metaproperties/with_missed_regular_properties",
+    args = {
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metaproperties/with_missed_metaproperties",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metaproperties/with_missed_all_properties",
+    args = {
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_properties_anywhere,
+        data.args.value,
+        data.args.property_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
+-- assertions.has_properties_anywhere_or_is_nil()
+for _, data in ipairs({
+  {
+    name = "test_has_properties_anywhere_or_is_nil/nil",
+    args = {
+      value = nil,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/boolean",
+    args = {
+      value = true,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/number/integer",
+    args = {
+      value = 23,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/number/float",
+    args = {
+      value = 2.3,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/string",
+    args = {
+      value = "test",
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/function",
+    args = {
+      value = function() end,
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/table/empty",
+    args = {
+      value = {},
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/table/with_regular_properties",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_properties/with_underscores",
+    args = {
+      value = {
+        __one = function() end,
+        __two = function() end,
+      },
+      property_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_properties/missed",
+    args = {
+      value = {
+        three = function() end,
+        four = function() end,
+      },
+      property_names = {"one", "two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/table/with_metaproperties",
+    args = {
+      value = setmetatable({}, {
+        __eq = function() end,
+        __call = function() end,
+      }),
+      property_names = {"__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_metaproperties/without_underscores",
+    args = {
+      value = setmetatable({}, {
+        eq = function() end,
+        call = function() end,
+      }),
+      property_names = {"eq", "call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil/table/with_metaproperties/missed",
+    args = {
+      value = setmetatable({}, {
+        __add = function() end,
+        __sub = function() end,
+      }),
+      property_names = {"__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metaproperties",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = _assert_no_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metaproperties/with_missed_regular_properties",
+    args = {
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metaproperties/with_missed_metaproperties",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metaproperties/with_missed_all_properties",
+    args = {
+      value = setmetatable(
+        {
+          three = function() end,
+          four = function() end,
+        },
+        {
+          __add = function() end,
+          __sub = function() end,
+        }
+      ),
+      property_names = {"one", "two", "__eq", "__call"},
+    },
+    want = luaunit.assert_error,
+  },
+}) do
+  for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
+    local name = string.format("%s/%s", data.name, assertions_mode)
+    TestAssertions[name] = function()
+      local previous_assertions_mode = assertions.get_assertions_mode()
+      assertions.set_assertions_mode(assertions_mode)
+
+      local want = data.want
+      if assertions_mode == "without_assertions" then
+        want = _assert_no_error
+      end
+
+      want(
+        assertions.has_properties_anywhere_or_is_nil,
+        data.args.value,
+        data.args.property_names
+      )
+
+      assertions.set_assertions_mode(previous_assertions_mode)
+    end
+  end
+end
+
 -- assertions.has_metamethods()
 for _, data in ipairs({
   {

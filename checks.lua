@@ -425,6 +425,54 @@ function checks.make_properties_or_nil_checker(property_names)
   end
 end
 
+--- ⚠️. Unions the @{has_metaproperties|has_metaproperties()} and @{has_properties|has_properties()} functions. The property names are separated by prefix: if a property name starts with two underscores, it's passed to the @{has_metaproperties|has_metaproperties()} function, otherwise to the @{has_properties|has_properties()} function.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @treturn bool
+function checks.has_properties_anywhere(value, property_names)
+  assert(checks.is_sequence(property_names, checks.is_string))
+
+  local metaproperty_names = {}
+  local regular_property_names = {}
+  for _, property_name in ipairs(property_names) do
+    if string.match(property_name, "^__") then
+      table.insert(metaproperty_names, property_name)
+    else
+      table.insert(regular_property_names, property_name)
+    end
+  end
+
+  return (#metaproperty_names == 0
+    or checks.has_metaproperties(value, metaproperty_names))
+    and checks.has_properties(value, regular_property_names)
+end
+
+--- ⚠️. Unions the @{make_metaproperties_checker|make_metaproperties_checker()} and @{make_properties_checker|make_properties_checker()} functions. The property names are separated by prefix: if a property name starts with two underscores, it's passed to the @{make_metaproperties_checker|make_metaproperties_checker()} function, otherwise to the @{make_properties_checker|make_properties_checker()} function.
+-- @tparam {string,...} property_names
+-- @treturn func `func(value: any): bool`
+function checks.make_properties_anywhere_checker(property_names)
+  return function(value)
+    return checks.has_properties_anywhere(value, property_names)
+  end
+end
+
+--- ⚠️. Unions the @{has_metaproperties_or_is_nil|has_metaproperties_or_is_nil()} and @{has_properties_or_is_nil|has_properties_or_is_nil()} functions. The property names are separated by prefix: if a property name starts with two underscores, it's passed to the @{has_metaproperties_or_is_nil|has_metaproperties_or_is_nil()} function, otherwise to the @{has_properties_or_is_nil|has_properties_or_is_nil()} function.
+-- @tparam any value
+-- @tparam {string,...} property_names
+-- @treturn bool
+function checks.has_properties_anywhere_or_is_nil(value, property_names)
+  return checks.has_properties_anywhere(value, property_names) or value == nil
+end
+
+--- ⚠️. Unions the @{make_metaproperties_or_nil_checker|make_metaproperties_or_nil_checker()} and @{make_properties_or_nil_checker|make_properties_or_nil_checker()} functions. The property names are separated by prefix: if a property name starts with two underscores, it's passed to the @{make_metaproperties_or_nil_checker|make_metaproperties_or_nil_checker()} function, otherwise to the @{make_properties_or_nil_checker|make_properties_or_nil_checker()} function.
+-- @tparam {string,...} property_names
+-- @treturn func `func(value: any): bool`
+function checks.make_properties_anywhere_or_nil_checker(property_names)
+  return function(value)
+    return checks.has_properties_anywhere_or_is_nil(value, property_names)
+  end
+end
+
 ---
 -- @tparam any value
 -- @tparam {string,...} metamethod_names
