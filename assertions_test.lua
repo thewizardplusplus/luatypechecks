@@ -3028,7 +3028,18 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods/table/with_metamethods/functions",
+    name = "test_has_methods/table/with_metamethods/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      method_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods/table/with_metamethods/with_callable_values/functions",
     args = {
       value = Object:new(23),
       method_names = {"__eq", "__call"},
@@ -3036,7 +3047,7 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods/table/with_metamethods/tables",
+    name = "test_has_methods/table/with_metamethods/with_callable_values/tables",
     args = {
       value = setmetatable({}, {
         __eq = Object:new(23),
@@ -3180,7 +3191,18 @@ for _, data in ipairs({
     want = _assert_no_error,
   },
   {
-    name = "test_has_methods_or_is_nil/table/with_metamethods/functions",
+    name = "test_has_methods_or_is_nil/table/with_metamethods/with_non-callable_values",
+    args = {
+      value = setmetatable({}, {
+        __one = 23,
+        __two = 42,
+      }),
+      method_names = {"__one", "__two"},
+    },
+    want = luaunit.assert_error,
+  },
+  {
+    name = "test_has_methods_or_is_nil/table/with_metamethods/with_callable_values/functions",
     args = {
       value = Object:new(23),
       method_names = {"__eq", "__call"},
@@ -3188,7 +3210,7 @@ for _, data in ipairs({
     want = luaunit.assert_error,
   },
   {
-    name = "test_has_methods_or_is_nil/table/with_metamethods/tables",
+    name = "test_has_methods_or_is_nil/table/with_metamethods/with_callable_values/tables",
     args = {
       value = setmetatable({}, {
         __eq = Object:new(23),
