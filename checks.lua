@@ -341,7 +341,11 @@ end
 function checks.has_metaproperties(value, metaproperty_names)
   assert(checks.is_sequence(metaproperty_names, checks.is_string))
 
-  return checks._are_metaproperties_existing_and_valid(value, metaproperty_names, function() return true end)
+  return checks._are_metaproperties_existing_and_valid(
+    value,
+    metaproperty_names,
+    function() return true end
+  )
 end
 
 ---
@@ -377,7 +381,11 @@ end
 function checks.has_properties(value, property_names)
   assert(checks.is_sequence(property_names, checks.is_string))
 
-  return checks._are_properties_existing_and_valid(value, property_names, function() return true end)
+  return checks._are_properties_existing_and_valid(
+    value,
+    property_names,
+    function() return true end
+  )
 end
 
 --- ⚠️. Creates a closure that checks that the value has the specified properties. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
@@ -413,7 +421,8 @@ end
 function checks.has_properties_anywhere(value, property_names)
   assert(checks.is_sequence(property_names, checks.is_string))
 
-  local metaproperty_names, regular_property_names = checks._divide_properties_into_meta_and_regular(property_names)
+  local metaproperty_names, regular_property_names =
+    checks._divide_properties_into_meta_and_regular(property_names)
   return (#metaproperty_names == 0
     or checks.has_metaproperties(value, metaproperty_names))
     and checks.has_properties(value, regular_property_names)
@@ -452,7 +461,11 @@ end
 function checks.has_metamethods(value, metamethod_names)
   assert(checks.is_sequence(metamethod_names, checks.is_string))
 
-  return checks._are_metaproperties_existing_and_valid(value, metamethod_names, checks.is_callable)
+  return checks._are_metaproperties_existing_and_valid(
+    value,
+    metamethod_names,
+    checks.is_callable
+  )
 end
 
 ---
@@ -488,7 +501,11 @@ end
 function checks.has_methods(value, method_names)
   assert(checks.is_sequence(method_names, checks.is_string))
 
-  return checks._are_properties_existing_and_valid(value, method_names, checks.is_callable)
+  return checks._are_properties_existing_and_valid(
+    value,
+    method_names,
+    checks.is_callable
+  )
 end
 
 --- ⚠️. Creates a closure that checks that the value has the specified methods. Note that it tries to get methods by regular indexing, it doesn't touch the value metatable.
@@ -524,7 +541,8 @@ end
 function checks.has_methods_anywhere(value, method_names)
   assert(checks.is_sequence(method_names, checks.is_string))
 
-  local metamethod_names, regular_method_names = checks._divide_properties_into_meta_and_regular(method_names)
+  local metamethod_names, regular_method_names =
+    checks._divide_properties_into_meta_and_regular(method_names)
   return (#metamethod_names == 0
     or checks.has_metamethods(value, metamethod_names))
     and checks.has_methods(value, regular_method_names)
@@ -617,13 +635,18 @@ function checks._divide_properties_into_meta_and_regular(property_names)
   return metaproperty_names, regular_property_names
 end
 
-function checks._are_properties_existing_and_valid(value, property_names, property_validator)
+function checks._are_properties_existing_and_valid(
+  value,
+  property_names,
+  property_validator
+)
   assert(checks.is_sequence(property_names, checks.is_string))
   assert(checks.is_function(property_validator))
 
   for _, property_name in ipairs(property_names) do
     local property_instance = value[property_name]
-    if property_instance == nil or not property_validator(property_instance) then
+    if property_instance == nil
+      or not property_validator(property_instance) then
       return false
     end
   end
@@ -631,7 +654,11 @@ function checks._are_properties_existing_and_valid(value, property_names, proper
   return true
 end
 
-function checks._are_metaproperties_existing_and_valid(value, metaproperty_names, metaproperty_validator)
+function checks._are_metaproperties_existing_and_valid(
+  value,
+  metaproperty_names,
+  metaproperty_validator
+)
   assert(checks.is_sequence(metaproperty_names, checks.is_string))
   assert(checks.is_function(metaproperty_validator))
 
@@ -640,7 +667,11 @@ function checks._are_metaproperties_existing_and_valid(value, metaproperty_names
     return false
   end
 
-  return checks._are_properties_existing_and_valid(metatable, metaproperty_names, metaproperty_validator)
+  return checks._are_properties_existing_and_valid(
+    metatable,
+    metaproperty_names,
+    metaproperty_validator
+  )
 end
 
 -- we cannot check right away because at that moment the check function isn't defined
