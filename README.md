@@ -19,9 +19,14 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
     - `checks.is_table(value[, key_checker[, value_checker[, deep_checks_mode="with_deep_checks"]]])`:
       - `checks.is_sequence(value[, value_checker[, deep_checks_mode="with_deep_checks"]])`;
     - `checks.is_enumeration(value, enumeration)`;
-    - `checks.has_metamethods(value, metamethod_names)`;
-    - `checks.has_methods(value, method_names)`;
-    - `checks.has_methods_anywhere(value, method_names)`;
+    - property checks:
+      - `checks.has_metaproperties(value, metaproperty_names)`;
+      - `checks.has_properties(value, property_names)`;
+      - `checks.has_properties_anywhere(value, property_names)`;
+    - method checks:
+      - `checks.has_metamethods(value, metamethod_names)`;
+      - `checks.has_methods(value, method_names)`;
+      - `checks.has_methods_anywhere(value, method_names)`;
     - `checks.is_instance(value, class)`;
   - for each check:
     - there is a variant that allows the value `nil` &mdash; `checks.is_*_or_nil(value, ...)` / `checks.has_*_or_is_nil(value, ...)`;

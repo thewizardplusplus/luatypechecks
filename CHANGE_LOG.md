@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.3.0](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.0) (2023-12-17)
+
+Added checks for the presence of metaproperties and regular properties; performed refactoring.
+
+- checking:
+  - checks:
+    - property checks:
+      - `checks.has_metaproperties(value, metaproperty_names)`;
+      - `checks.has_properties(value, property_names)`;
+      - `checks.has_properties_anywhere(value, property_names)`;
+- perform refactoring:
+  - add the `checks._divide_properties_into_meta_and_regular()` function;
+  - add the `checks._are_properties_existing_and_valid()` function;
+  - add the `checks._are_metaproperties_existing_and_valid()` function.
+
 ## [v1.2.0](https://github.com/thewizardplusplus/luatypechecks/tree/v1.2.0) (2023-08-15)
 
 Added checks for the presence of metamethods and regular methods; added switchable analogues of the `assert()` function; supplemented the documentation with descriptions of functions that are not obvious.
