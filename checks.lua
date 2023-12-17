@@ -341,12 +341,7 @@ end
 function checks.has_metaproperties(value, metaproperty_names)
   assert(checks.is_sequence(metaproperty_names, checks.is_string))
 
-  local metatable = getmetatable(value)
-  if metatable == nil then
-    return false
-  end
-
-  return checks._are_properties_existing_and_valid(metatable, metaproperty_names, function() return true end)
+  return checks._are_metaproperties_existing_and_valid(value, metaproperty_names, function() return true end)
 end
 
 ---
@@ -457,12 +452,7 @@ end
 function checks.has_metamethods(value, metamethod_names)
   assert(checks.is_sequence(metamethod_names, checks.is_string))
 
-  local metatable = getmetatable(value)
-  if metatable == nil then
-    return false
-  end
-
-  return checks._are_properties_existing_and_valid(metatable, metamethod_names, checks.is_callable)
+  return checks._are_metaproperties_existing_and_valid(value, metamethod_names, checks.is_callable)
 end
 
 ---
@@ -639,6 +629,18 @@ function checks._are_properties_existing_and_valid(value, property_names, proper
   end
 
   return true
+end
+
+function checks._are_metaproperties_existing_and_valid(value, metaproperty_names, metaproperty_validator)
+  assert(checks.is_sequence(metaproperty_names, checks.is_string))
+  assert(checks.is_function(metaproperty_validator))
+
+  local metatable = getmetatable(value)
+  if metatable == nil then
+    return false
+  end
+
+  return checks._are_properties_existing_and_valid(metatable, metaproperty_names, metaproperty_validator)
 end
 
 -- we cannot check right away because at that moment the check function isn't defined
