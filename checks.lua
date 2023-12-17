@@ -432,16 +432,7 @@ end
 function checks.has_properties_anywhere(value, property_names)
   assert(checks.is_sequence(property_names, checks.is_string))
 
-  local metaproperty_names = {}
-  local regular_property_names = {}
-  for _, property_name in ipairs(property_names) do
-    if string.match(property_name, "^__") then
-      table.insert(metaproperty_names, property_name)
-    else
-      table.insert(regular_property_names, property_name)
-    end
-  end
-
+  local metaproperty_names, regular_property_names = checks._divide_properties_into_meta_and_regular(property_names)
   return (#metaproperty_names == 0
     or checks.has_metaproperties(value, metaproperty_names))
     and checks.has_properties(value, regular_property_names)
@@ -572,16 +563,7 @@ end
 function checks.has_methods_anywhere(value, method_names)
   assert(checks.is_sequence(method_names, checks.is_string))
 
-  local metamethod_names = {}
-  local regular_method_names = {}
-  for _, method_name in ipairs(method_names) do
-    if string.match(method_name, "^__") then
-      table.insert(metamethod_names, method_name)
-    else
-      table.insert(regular_method_names, method_name)
-    end
-  end
-
+  local metamethod_names, regular_method_names = checks._divide_properties_into_meta_and_regular(method_names)
   return (#metamethod_names == 0
     or checks.has_metamethods(value, metamethod_names))
     and checks.has_methods(value, regular_method_names)
@@ -656,6 +638,22 @@ function checks._without_deep_checks(deep_checks_mode)
 
   return _global_deep_checks_mode == "without_deep_checks"
     or deep_checks_mode == "without_deep_checks"
+end
+
+function checks._divide_properties_into_meta_and_regular(property_names)
+  assert(checks.is_sequence(property_names, checks.is_string))
+
+  local metaproperty_names = {}
+  local regular_property_names = {}
+  for _, property_name in ipairs(property_names) do
+    if string.match(property_name, "^__") then
+      table.insert(metaproperty_names, property_name)
+    else
+      table.insert(regular_property_names, property_name)
+    end
+  end
+
+  return metaproperty_names, regular_property_names
 end
 
 -- we cannot check right away because at that moment the check function isn't defined
