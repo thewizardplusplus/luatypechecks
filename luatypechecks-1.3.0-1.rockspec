@@ -1,6 +1,6 @@
 rockspec_format = "3.0"
 package = "luatypechecks"
-version = "1.2.0-1"
+version = "1.3.0-1"
 description = {
   summary = "The library that implements various type checks in order to simulate static typing in the Lua language.",
   license = "MIT",
@@ -9,7 +9,7 @@ description = {
 }
 source = {
   url = "git+https://github.com/thewizardplusplus/luatypechecks.git",
-  tag = "v1.2.0",
+  tag = "v1.3.0",
 }
 dependencies = {
   "lua >= 5.1",
