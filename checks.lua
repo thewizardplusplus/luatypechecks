@@ -346,14 +346,7 @@ function checks.has_metaproperties(value, metaproperty_names)
     return false
   end
 
-  for _, metaproperty_name in ipairs(metaproperty_names) do
-    local metaproperty_instance = metatable[metaproperty_name]
-    if metaproperty_instance == nil then
-      return false
-    end
-  end
-
-  return true
+  return checks._are_properties_existing_and_valid(metatable, metaproperty_names, function() return true end)
 end
 
 ---
@@ -389,14 +382,7 @@ end
 function checks.has_properties(value, property_names)
   assert(checks.is_sequence(property_names, checks.is_string))
 
-  for _, property_name in ipairs(property_names) do
-    local property_instance = value[property_name]
-    if property_instance == nil then
-      return false
-    end
-  end
-
-  return true
+  return checks._are_properties_existing_and_valid(value, property_names, function() return true end)
 end
 
 --- ⚠️. Creates a closure that checks that the value has the specified properties. Note that it tries to get properties by regular indexing, it doesn't touch the value metatable.
@@ -476,15 +462,7 @@ function checks.has_metamethods(value, metamethod_names)
     return false
   end
 
-  for _, metamethod_name in ipairs(metamethod_names) do
-    local metamethod_instance = metatable[metamethod_name]
-    if metamethod_instance == nil
-      or not checks.is_callable(metamethod_instance) then
-      return false
-    end
-  end
-
-  return true
+  return checks._are_properties_existing_and_valid(metatable, metamethod_names, checks.is_callable)
 end
 
 ---
@@ -520,14 +498,7 @@ end
 function checks.has_methods(value, method_names)
   assert(checks.is_sequence(method_names, checks.is_string))
 
-  for _, method_name in ipairs(method_names) do
-    local method_instance = value[method_name]
-    if method_instance == nil or not checks.is_callable(method_instance) then
-      return false
-    end
-  end
-
-  return true
+  return checks._are_properties_existing_and_valid(value, method_names, checks.is_callable)
 end
 
 --- ⚠️. Creates a closure that checks that the value has the specified methods. Note that it tries to get methods by regular indexing, it doesn't touch the value metatable.
@@ -654,6 +625,20 @@ function checks._divide_properties_into_meta_and_regular(property_names)
   end
 
   return metaproperty_names, regular_property_names
+end
+
+function checks._are_properties_existing_and_valid(value, property_names, property_validator)
+  assert(checks.is_sequence(property_names, checks.is_string))
+  assert(checks.is_function(property_validator))
+
+  for _, property_name in ipairs(property_names) do
+    local property_instance = value[property_name]
+    if property_instance == nil or not property_validator(property_instance) then
+      return false
+    end
+  end
+
+  return true
 end
 
 -- we cannot check right away because at that moment the check function isn't defined
