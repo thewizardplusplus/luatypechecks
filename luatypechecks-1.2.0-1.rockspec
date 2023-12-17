@@ -12,7 +12,7 @@ source = {
   tag = "v1.2.0",
 }
 dependencies = {
-  "lua >= 5.1, < 5.5",
+  "lua >= 5.1",
   "middleclass >= 4.1.1, < 5.0",
 }
 test_dependencies = {
