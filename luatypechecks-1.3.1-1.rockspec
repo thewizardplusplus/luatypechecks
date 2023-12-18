@@ -1,6 +1,6 @@
 rockspec_format = "3.0"
 package = "luatypechecks"
-version = "1.3.0-1"
+version = "1.3.1-1"
 description = {
   summary = "The library that implements various type checks in order to simulate static typing in the Lua language.",
   license = "MIT",
@@ -9,7 +9,7 @@ description = {
 }
 source = {
   url = "git+https://github.com/thewizardplusplus/luatypechecks.git",
-  tag = "v1.3.0",
+  tag = "v1.3.1",
 }
 dependencies = {
   "lua >= 5.1",
@@ -21,11 +21,10 @@ test_dependencies = {
 build = {
   type = "builtin",
   modules = {
-    ["checks"] = "checks.lua",
-    ["checks_test"] = "checks_test.lua",
-    ["assertions"] = "assertions.lua",
-    ["assertions_test"] = "assertions_test.lua",
-    ["test"] = "test.lua",
+    ["luatypechecks.checks"] = "checks.lua",
+    ["luatypechecks.checks_test"] = "checks_test.lua",
+    ["luatypechecks.assertions"] = "assertions.lua",
+    ["luatypechecks.assertions_test"] = "assertions_test.lua",
   },
   copy_directories = {
     "doc",
