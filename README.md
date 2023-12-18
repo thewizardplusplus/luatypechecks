@@ -1,5 +1,7 @@
 # luatypechecks
 
+[![test](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml)
+
 The library that implements various type checks in order to simulate static typing in the Lua language.
 
 Note that this library isn't designed to validate input data, but only to simulate static typing for function parameters.
