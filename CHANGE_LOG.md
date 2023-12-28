@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.3.1](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.1) (2023-12-19)
+
+Fixed Lua 5.1 support; added testing in CI.
+
+- remove the use of the `goto` statement to support Lua 5.1;
+- add the `test` workflow for [GitHub Actions](https://github.com/features/actions):
+  - perform testing by Lua 5.1, Lua 5.2, Lua 5.3, Lua 5.4, and LuaJIT.
+
 ## [v1.3.0](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.0) (2023-12-17)
 
 Added checks for the presence of metaproperties and regular properties; performed refactoring.
