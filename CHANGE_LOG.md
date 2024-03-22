@@ -1,5 +1,11 @@
 # Change Log
 
+## [v1.3.2](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.2) (2024-03-22)
+
+Fix an assertion stack trace level.
+
+- fix an assertion stack trace level.
+
 ## [v1.3.1](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.1) (2023-12-19)
 
 Support for Lua 5.1; the `test` workflow for GitHub Actions.
