@@ -7,6 +7,16 @@ local function _assert_no_error(test_function, ...)
   test_function(...)
 end
 
+local function _assert_error(test_function, ...)
+  luaunit.assert_error_msg_matches(
+    "^.+/luatypechecks/assertions_test.lua:%d+: assertion failed!$",
+    -- we should wrap the call in a function
+    -- to properly capture an error stack trace
+    function(...) test_function(...) end,
+    ...
+  )
+end
+
 local Object = {}
 
 function Object:new(id)
@@ -66,27 +76,27 @@ for _, data in ipairs({
   {
     name = "test_is_deep_checks_mode/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode"
@@ -103,12 +113,12 @@ for _, data in ipairs({
   {
     name = "test_is_deep_checks_mode/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -139,22 +149,22 @@ for _, data in ipairs({
   {
     name = "test_is_deep_checks_mode_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode_or_nil/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode_or_nil"
@@ -173,12 +183,12 @@ for _, data in ipairs({
   {
     name = "test_is_deep_checks_mode_or_nil/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_deep_checks_mode_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -204,27 +214,27 @@ for _, data in ipairs({
   {
     name = "test_is_assertions_mode/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode/string/assertions_mode/without_assertions",
@@ -239,12 +249,12 @@ for _, data in ipairs({
   {
     name = "test_is_assertions_mode/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -275,22 +285,22 @@ for _, data in ipairs({
   {
     name = "test_is_assertions_mode_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode_or_nil/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode_or_nil"
@@ -309,12 +319,12 @@ for _, data in ipairs({
   {
     name = "test_is_assertions_mode_or_nil/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_assertions_mode_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -340,7 +350,7 @@ for _, data in ipairs({
   {
     name = "test_is_true/false",
     args = { value = false },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_true/true",
@@ -376,7 +386,7 @@ for _, data in ipairs({
   {
     name = "test_is_false/true",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -402,7 +412,7 @@ for _, data in ipairs({
   {
     name = "test_is_boolean/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean/boolean",
@@ -412,27 +422,27 @@ for _, data in ipairs({
   {
     name = "test_is_boolean/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -468,27 +478,27 @@ for _, data in ipairs({
   {
     name = "test_is_boolean_or_nil/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean_or_nil/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_boolean_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -514,12 +524,12 @@ for _, data in ipairs({
   {
     name = "test_is_number/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number/number/integer",
@@ -534,17 +544,17 @@ for _, data in ipairs({
   {
     name = "test_is_number/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -575,7 +585,7 @@ for _, data in ipairs({
   {
     name = "test_is_number_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number_or_nil/number/integer",
@@ -590,17 +600,17 @@ for _, data in ipairs({
   {
     name = "test_is_number_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number_or_nil/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_number_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -626,12 +636,12 @@ for _, data in ipairs({
   {
     name = "test_is_integer/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer/number/integer",
@@ -641,22 +651,22 @@ for _, data in ipairs({
   {
     name = "test_is_integer/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -687,7 +697,7 @@ for _, data in ipairs({
   {
     name = "test_is_integer_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer_or_nil/number/integer",
@@ -697,22 +707,22 @@ for _, data in ipairs({
   {
     name = "test_is_integer_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer_or_nil/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_integer_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -738,22 +748,22 @@ for _, data in ipairs({
   {
     name = "test_is_string/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string/string",
@@ -763,12 +773,12 @@ for _, data in ipairs({
   {
     name = "test_is_string/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -799,17 +809,17 @@ for _, data in ipairs({
   {
     name = "test_is_string_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string_or_nil/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string_or_nil/string",
@@ -819,12 +829,12 @@ for _, data in ipairs({
   {
     name = "test_is_string_or_nil/function",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_string_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -850,27 +860,27 @@ for _, data in ipairs({
   {
     name = "test_is_function/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function/function",
@@ -880,7 +890,7 @@ for _, data in ipairs({
   {
     name = "test_is_function/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -911,22 +921,22 @@ for _, data in ipairs({
   {
     name = "test_is_function_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function_or_nil/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_function_or_nil/function",
@@ -936,7 +946,7 @@ for _, data in ipairs({
   {
     name = "test_is_function_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -962,27 +972,27 @@ for _, data in ipairs({
   {
     name = "test_is_callable/nil",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable/function",
@@ -992,7 +1002,7 @@ for _, data in ipairs({
   {
     name = "test_is_callable/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable/table/__call_metamethod/function",
@@ -1035,22 +1045,22 @@ for _, data in ipairs({
   {
     name = "test_is_callable_or_nil/boolean",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable_or_nil/number/integer",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable_or_nil/number/float",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable_or_nil/string",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable_or_nil/function",
@@ -1060,7 +1070,7 @@ for _, data in ipairs({
   {
     name = "test_is_callable_or_nil/table",
     args = { value = {} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_callable_or_nil/table/__call_metamethod/function",
@@ -1099,37 +1109,37 @@ for _, data in ipairs({
     name = "test_is_table/nil",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/boolean",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/number/integer",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/number/float",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/string",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/function",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/table",
@@ -1153,7 +1163,7 @@ for _, data in ipairs({
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/table/value_checker/true",
@@ -1171,7 +1181,7 @@ for _, data in ipairs({
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/table/key_and_value_checkers/true",
@@ -1191,7 +1201,7 @@ for _, data in ipairs({
       key_checker = checks.is_boolean,
       value_checker = checks.is_number,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/table/key_and_value_checkers/value_checker_false",
@@ -1201,7 +1211,7 @@ for _, data in ipairs({
       key_checker = checks.is_string,
       value_checker = checks.is_boolean,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table/table/key_checker/true/without_deep_checks",
@@ -1414,31 +1424,31 @@ for _, data in ipairs({
     name = "test_is_table_or_nil/boolean",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/number/integer",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/number/float",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/string",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/function",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/table",
@@ -1462,7 +1472,7 @@ for _, data in ipairs({
       value = { one = 1, two = 2 },
       key_checker = checks.is_number,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/table/value_checker/true",
@@ -1480,7 +1490,7 @@ for _, data in ipairs({
       value = { one = 1, two = 2 },
       value_checker = checks.is_string,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/table/key_and_value_checkers/true",
@@ -1502,7 +1512,7 @@ for _, data in ipairs({
       key_checker = checks.is_boolean,
       value_checker = checks.is_number,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil"
@@ -1514,7 +1524,7 @@ for _, data in ipairs({
       key_checker = checks.is_string,
       value_checker = checks.is_boolean,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_table_or_nil/table/key_checker/true/without_deep_checks",
@@ -1721,37 +1731,37 @@ for _, data in ipairs({
     name = "test_is_sequence/nil",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = nil },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/boolean",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/number/integer",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/number/float",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/string",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/function",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/table/empty",
@@ -1781,25 +1791,25 @@ for _, data in ipairs({
       value = {"one", "two"},
       value_checker = checks.is_number,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/table/not_sequence/not_integer_indices",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = { one = 1, two = 2 } },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/table/not_sequence/absent_indices",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence/table/not_sequence/indices_not_starting_with_one",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence"
@@ -1955,31 +1965,31 @@ for _, data in ipairs({
     name = "test_is_sequence_or_nil/boolean",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = true },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/number/integer",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 23 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/number/float",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = 2.3 },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/string",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = "test" },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/function",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = function() end },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/table/empty",
@@ -2009,19 +2019,19 @@ for _, data in ipairs({
       value = {"one", "two"},
       value_checker = checks.is_number,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/not_integer_indices",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = { one = 1, two = 2 } },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil/table/not_sequence/absent_indices",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = { [1] = "one", [3] = "two" } },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil"
@@ -2029,7 +2039,7 @@ for _, data in ipairs({
       .. "/indices_not_starting_with_one",
     global_deep_checks_mode = "with_deep_checks",
     args = { value = { [2] = "one", [3] = "two"} },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_sequence_or_nil"
@@ -2181,7 +2191,7 @@ for _, data in ipairs({
       value = nil,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/boolean",
@@ -2189,7 +2199,7 @@ for _, data in ipairs({
       value = true,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/number/integer/true",
@@ -2205,7 +2215,7 @@ for _, data in ipairs({
       value = 23,
       enumeration = {5, 12},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/number/float",
@@ -2213,7 +2223,7 @@ for _, data in ipairs({
       value = 2.3,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/string/true",
@@ -2229,7 +2239,7 @@ for _, data in ipairs({
       value = "three",
       enumeration = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/function",
@@ -2237,7 +2247,7 @@ for _, data in ipairs({
       value = function() end,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/table",
@@ -2245,7 +2255,7 @@ for _, data in ipairs({
       value = {},
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration/table/__eq_metamethod/true",
@@ -2261,7 +2271,7 @@ for _, data in ipairs({
       value = Object:new(23),
       enumeration = {Object:new(5), Object:new(12)},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -2302,7 +2312,7 @@ for _, data in ipairs({
       value = true,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration_or_nil/number/integer/true",
@@ -2318,7 +2328,7 @@ for _, data in ipairs({
       value = 23,
       enumeration = {5, 12},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration_or_nil/number/float",
@@ -2326,7 +2336,7 @@ for _, data in ipairs({
       value = 2.3,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration_or_nil/string/true",
@@ -2342,7 +2352,7 @@ for _, data in ipairs({
       value = "three",
       enumeration = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration_or_nil/function",
@@ -2350,7 +2360,7 @@ for _, data in ipairs({
       value = function() end,
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration_or_nil/table",
@@ -2358,7 +2368,7 @@ for _, data in ipairs({
       value = {},
       enumeration = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_enumeration_or_nil/table/__eq_metamethod/true",
@@ -2374,7 +2384,7 @@ for _, data in ipairs({
       value = Object:new(23),
       enumeration = {Object:new(5), Object:new(12)},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -2407,7 +2417,7 @@ for _, data in ipairs({
       value = nil,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/boolean",
@@ -2415,7 +2425,7 @@ for _, data in ipairs({
       value = true,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/number/integer",
@@ -2423,7 +2433,7 @@ for _, data in ipairs({
       value = 23,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/number/float",
@@ -2431,7 +2441,7 @@ for _, data in ipairs({
       value = 2.3,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/string",
@@ -2447,7 +2457,7 @@ for _, data in ipairs({
       value = function() end,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/table/without_metatable",
@@ -2455,7 +2465,7 @@ for _, data in ipairs({
       value = {},
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/table/without_metaproperties",
@@ -2507,7 +2517,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metaproperty_names = {"__add", "__sub"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/table/with_missed_metaproperties/some",
@@ -2515,7 +2525,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metaproperty_names = {"__eq", "__add"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -2556,7 +2566,7 @@ for _, data in ipairs({
       value = true,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil/number/integer",
@@ -2564,7 +2574,7 @@ for _, data in ipairs({
       value = 23,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil/number/float",
@@ -2572,7 +2582,7 @@ for _, data in ipairs({
       value = 2.3,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil/string",
@@ -2588,7 +2598,7 @@ for _, data in ipairs({
       value = function() end,
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil/table/without_metatable",
@@ -2596,7 +2606,7 @@ for _, data in ipairs({
       value = {},
       metaproperty_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil/table/without_metaproperties",
@@ -2650,7 +2660,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metaproperty_names = {"__add", "__sub"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil"
@@ -2660,7 +2670,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metaproperty_names = {"__eq", "__add"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -2784,7 +2794,7 @@ for _, data in ipairs({
       }),
       property_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties"
@@ -2794,7 +2804,7 @@ for _, data in ipairs({
       value = Object:new(23),
       property_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties"
@@ -2807,7 +2817,7 @@ for _, data in ipairs({
       }),
       property_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/table/with_missed_properties/all",
@@ -2818,7 +2828,7 @@ for _, data in ipairs({
       },
       property_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/table/with_missed_properties/some",
@@ -2829,7 +2839,7 @@ for _, data in ipairs({
       },
       property_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -2953,7 +2963,7 @@ for _, data in ipairs({
       }),
       property_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil"
@@ -2963,7 +2973,7 @@ for _, data in ipairs({
       value = Object:new(23),
       property_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil"
@@ -2976,7 +2986,7 @@ for _, data in ipairs({
       }),
       property_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/table/with_missed_properties/all",
@@ -2987,7 +2997,7 @@ for _, data in ipairs({
       },
       property_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/table/with_missed_properties/some",
@@ -2998,7 +3008,7 @@ for _, data in ipairs({
       },
       property_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -3103,7 +3113,7 @@ for _, data in ipairs({
       },
       property_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/table/with_regular_properties/missed",
@@ -3114,7 +3124,7 @@ for _, data in ipairs({
       },
       property_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/table/with_metaproperties",
@@ -3138,7 +3148,7 @@ for _, data in ipairs({
       }),
       property_names = {"eq", "call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/table/with_metaproperties/missed",
@@ -3149,7 +3159,7 @@ for _, data in ipairs({
       }),
       property_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/table/with_regular_and_metaproperties",
@@ -3185,7 +3195,7 @@ for _, data in ipairs({
       ),
       property_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere"
@@ -3204,7 +3214,7 @@ for _, data in ipairs({
       ),
       property_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere"
@@ -3223,7 +3233,7 @@ for _, data in ipairs({
       ),
       property_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -3330,7 +3340,7 @@ for _, data in ipairs({
       },
       property_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -3343,7 +3353,7 @@ for _, data in ipairs({
       },
       property_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/table/with_metaproperties",
@@ -3367,7 +3377,7 @@ for _, data in ipairs({
       }),
       property_names = {"eq", "call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -3380,7 +3390,7 @@ for _, data in ipairs({
       }),
       property_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -3418,7 +3428,7 @@ for _, data in ipairs({
       ),
       property_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -3437,7 +3447,7 @@ for _, data in ipairs({
       ),
       property_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -3456,7 +3466,7 @@ for _, data in ipairs({
       ),
       property_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -3489,7 +3499,7 @@ for _, data in ipairs({
       value = nil,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/boolean",
@@ -3497,7 +3507,7 @@ for _, data in ipairs({
       value = true,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/number/integer",
@@ -3505,7 +3515,7 @@ for _, data in ipairs({
       value = 23,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/number/float",
@@ -3513,7 +3523,7 @@ for _, data in ipairs({
       value = 2.3,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/string",
@@ -3529,7 +3539,7 @@ for _, data in ipairs({
       value = function() end,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/table/without_metatable",
@@ -3537,7 +3547,7 @@ for _, data in ipairs({
       value = {},
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/table/without_metamethods",
@@ -3558,7 +3568,7 @@ for _, data in ipairs({
       }),
       metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods"
@@ -3589,7 +3599,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metamethod_names = {"__add", "__sub"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/table/with_missed_metamethods/some",
@@ -3597,7 +3607,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metamethod_names = {"__eq", "__add"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -3638,7 +3648,7 @@ for _, data in ipairs({
       value = true,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/number/integer",
@@ -3646,7 +3656,7 @@ for _, data in ipairs({
       value = 23,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/number/float",
@@ -3654,7 +3664,7 @@ for _, data in ipairs({
       value = 2.3,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/string",
@@ -3670,7 +3680,7 @@ for _, data in ipairs({
       value = function() end,
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/table/without_metatable",
@@ -3678,7 +3688,7 @@ for _, data in ipairs({
       value = {},
       metamethod_names = {},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/table/without_metamethods",
@@ -3699,7 +3709,7 @@ for _, data in ipairs({
       }),
       metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil"
@@ -3730,7 +3740,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metamethod_names = {"__add", "__sub"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/table/with_missed_metamethods/some",
@@ -3738,7 +3748,7 @@ for _, data in ipairs({
       value = Object:new(23),
       metamethod_names = {"__eq", "__add"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -3827,7 +3837,7 @@ for _, data in ipairs({
       value = { one = 23, two = 42 },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/table/with_callable_values/functions",
@@ -3860,7 +3870,7 @@ for _, data in ipairs({
       }),
       method_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods"
@@ -3870,7 +3880,7 @@ for _, data in ipairs({
       value = Object:new(23),
       method_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods"
@@ -3883,7 +3893,7 @@ for _, data in ipairs({
       }),
       method_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/table/with_missed_methods/all",
@@ -3894,7 +3904,7 @@ for _, data in ipairs({
       },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/table/with_missed_methods/some",
@@ -3905,7 +3915,7 @@ for _, data in ipairs({
       },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -3994,7 +4004,7 @@ for _, data in ipairs({
       value = { one = 23, two = 42 },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/table/with_callable_values/functions",
@@ -4029,7 +4039,7 @@ for _, data in ipairs({
       }),
       method_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil"
@@ -4039,7 +4049,7 @@ for _, data in ipairs({
       value = Object:new(23),
       method_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil"
@@ -4052,7 +4062,7 @@ for _, data in ipairs({
       }),
       method_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/table/with_missed_methods/all",
@@ -4063,7 +4073,7 @@ for _, data in ipairs({
       },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/table/with_missed_methods/some",
@@ -4074,7 +4084,7 @@ for _, data in ipairs({
       },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -4179,7 +4189,7 @@ for _, data in ipairs({
       },
       method_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/table/with_regular_methods/missed",
@@ -4190,7 +4200,7 @@ for _, data in ipairs({
       },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/table/with_metamethods",
@@ -4214,7 +4224,7 @@ for _, data in ipairs({
       }),
       method_names = {"eq", "call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/table/with_metamethods/missed",
@@ -4225,7 +4235,7 @@ for _, data in ipairs({
       }),
       method_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/table/with_regular_and_metamethods",
@@ -4261,7 +4271,7 @@ for _, data in ipairs({
       ),
       method_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere"
@@ -4280,7 +4290,7 @@ for _, data in ipairs({
       ),
       method_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere"
@@ -4299,7 +4309,7 @@ for _, data in ipairs({
       ),
       method_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -4404,7 +4414,7 @@ for _, data in ipairs({
       },
       method_names = {"__one", "__two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil"
@@ -4417,7 +4427,7 @@ for _, data in ipairs({
       },
       method_names = {"one", "two"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods",
@@ -4441,7 +4451,7 @@ for _, data in ipairs({
       }),
       method_names = {"eq", "call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_metamethods/missed",
@@ -4452,7 +4462,7 @@ for _, data in ipairs({
       }),
       method_names = {"__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil"
@@ -4490,7 +4500,7 @@ for _, data in ipairs({
       ),
       method_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil"
@@ -4509,7 +4519,7 @@ for _, data in ipairs({
       ),
       method_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil"
@@ -4528,7 +4538,7 @@ for _, data in ipairs({
       ),
       method_names = {"one", "two", "__eq", "__call"},
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
@@ -4561,7 +4571,7 @@ for _, data in ipairs({
       value = nil,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/boolean",
@@ -4569,7 +4579,7 @@ for _, data in ipairs({
       value = true,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/number/integer",
@@ -4577,7 +4587,7 @@ for _, data in ipairs({
       value = 23,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/number/float",
@@ -4585,7 +4595,7 @@ for _, data in ipairs({
       value = 2.3,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/string",
@@ -4593,7 +4603,7 @@ for _, data in ipairs({
       value = "test",
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/function",
@@ -4601,7 +4611,7 @@ for _, data in ipairs({
       value = function() end,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/table",
@@ -4609,7 +4619,7 @@ for _, data in ipairs({
       value = {},
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance/table/middleclass_object/directly",
@@ -4666,7 +4676,7 @@ for _, data in ipairs({
       value = true,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance_or_nil/number/integer",
@@ -4674,7 +4684,7 @@ for _, data in ipairs({
       value = 23,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance_or_nil/number/float",
@@ -4682,7 +4692,7 @@ for _, data in ipairs({
       value = 2.3,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance_or_nil/string",
@@ -4690,7 +4700,7 @@ for _, data in ipairs({
       value = "test",
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance_or_nil/function",
@@ -4698,7 +4708,7 @@ for _, data in ipairs({
       value = function() end,
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance_or_nil/table",
@@ -4706,7 +4716,7 @@ for _, data in ipairs({
       value = {},
       class = MiddleclassObject,
     },
-    want = luaunit.assert_error,
+    want = _assert_error,
   },
   {
     name = "test_is_instance_or_nil/table/middleclass_object/directly",
