@@ -54,4 +54,4 @@ $ luarocks install luatypechecks
 
 The MIT License (MIT)
 
-Copyright &copy; 2023 thewizardplusplus
+Copyright &copy; 2023-2024 thewizardplusplus
