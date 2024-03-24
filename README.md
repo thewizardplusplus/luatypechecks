@@ -1,5 +1,7 @@
 # luatypechecks
 
+[![doc:build](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/doc.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/doc.yaml)
+[![doc:link](https://img.shields.io/badge/doc%3Alink-link-blue?logo=github)](https://thewizardplusplus.github.io/luatypechecks/)
 [![lint](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/lint.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/lint.yaml)
 [![test](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml)
 
