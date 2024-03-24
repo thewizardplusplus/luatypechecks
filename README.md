@@ -4,6 +4,7 @@
 [![doc:link](https://img.shields.io/badge/doc%3Alink-link-blue?logo=github)](https://thewizardplusplus.github.io/luatypechecks/)
 [![lint](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/lint.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/lint.yaml)
 [![test](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml)
+[![luarocks](https://img.shields.io/badge/luarocks-link-blue?logo=lua)](https://luarocks.org/modules/thewizardplusplus/luatypechecks)
 
 The library that implements various type checks in order to simulate static typing in the Lua language.
 
