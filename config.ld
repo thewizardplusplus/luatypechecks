@@ -13,6 +13,7 @@ file = {
 }
 topics = {
   "README.md",
+  "CHANGE_LOG.md",
   "LICENSE.txt",
 }
 format = "markdown"
