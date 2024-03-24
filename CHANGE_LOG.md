@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.3.3](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.3) (2024-03-24)
+
+Add the `lint` and `doc` workflows for GitHub Actions; improve the documentation.
+
+- add the workflows for GitHub Actions:
+  - add the `lint` workflow for GitHub Actions;
+  - add the `doc` workflow for GitHub Actions:
+    - fix the display of nested lists in the documentation (only for GitHub Actions);
+- improve the documentation:
+  - improve the index page in the documentation;
+  - add the change log to the documentation;
+  - add the [GitHub corner](https://github.com/tholman/github-corners) to the documentation;
+- add the LuaRocks link to the `README.md` file.
+
 ## [v1.3.2](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.2) (2024-03-22)
 
 Fix an assertion stack trace level.
