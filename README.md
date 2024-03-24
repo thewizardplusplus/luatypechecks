@@ -1,5 +1,6 @@
 # luatypechecks
 
+[![lint](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/lint.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/lint.yaml)
 [![test](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml/badge.svg)](https://github.com/thewizardplusplus/luatypechecks/actions/workflows/test.yaml)
 
 The library that implements various type checks in order to simulate static typing in the Lua language.
