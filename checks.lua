@@ -643,6 +643,10 @@ function checks._are_properties_existing_and_valid(
   assert(checks.is_sequence(property_names, checks.is_string))
   assert(checks.is_function(property_validator))
 
+  if not checks.is_table(value) then
+    return false
+  end
+
   for _, property_name in ipairs(property_names) do
     local property_instance = value[property_name]
     if property_instance == nil
