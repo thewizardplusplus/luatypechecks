@@ -2415,7 +2415,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/nil",
     args = {
       value = nil,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2423,7 +2423,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/boolean",
     args = {
       value = true,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2431,7 +2431,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/number/integer",
     args = {
       value = 23,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2439,7 +2439,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/number/float",
     args = {
       value = 2.3,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2447,15 +2447,15 @@ for _, data in ipairs({
     name = "test_has_metaproperties/string",
     args = {
       value = "test",
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties/function",
     args = {
       value = function() end,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2463,7 +2463,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/table/without_metatable",
     args = {
       value = {},
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2471,9 +2471,9 @@ for _, data in ipairs({
     name = "test_has_metaproperties/table/without_metaproperties",
     args = {
       value = setmetatable({}, {}),
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties"
@@ -2527,6 +2527,17 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_metaproperties"
+      .. "/table"
+      .. "/with_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -2556,7 +2567,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/nil",
     args = {
       value = nil,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_no_error,
   },
@@ -2564,7 +2575,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/boolean",
     args = {
       value = true,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2572,7 +2583,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/number/integer",
     args = {
       value = 23,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2580,7 +2591,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/number/float",
     args = {
       value = 2.3,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2588,15 +2599,15 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/string",
     args = {
       value = "test",
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil/function",
     args = {
       value = function() end,
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2604,7 +2615,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/table/without_metatable",
     args = {
       value = {},
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -2612,9 +2623,9 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/table/without_metaproperties",
     args = {
       value = setmetatable({}, {}),
-      metaproperty_names = {},
+      metaproperty_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metaproperties_or_is_nil"
@@ -2672,6 +2683,17 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_metaproperties_or_is_nil"
+      .. "/table"
+      .. "/with_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -2701,57 +2723,57 @@ for _, data in ipairs({
     name = "test_has_properties/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties/table/with_non-callable_values",
@@ -2841,6 +2863,20 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_properties"
+      .. "/table"
+      .. "/with_properties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -2870,7 +2906,7 @@ for _, data in ipairs({
     name = "test_has_properties_or_is_nil/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two"},
     },
     want = _assert_no_error,
   },
@@ -2878,49 +2914,49 @@ for _, data in ipairs({
     name = "test_has_properties_or_is_nil/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_or_is_nil/table/with_non-callable_values",
@@ -3010,6 +3046,20 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_properties_or_is_nil"
+      .. "/table"
+      .. "/with_properties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -3039,57 +3089,57 @@ for _, data in ipairs({
     name = "test_has_properties_anywhere/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere/table/with_regular_properties",
@@ -3235,6 +3285,26 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -3264,7 +3334,7 @@ for _, data in ipairs({
     name = "test_has_properties_anywhere_or_is_nil/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
     want = _assert_no_error,
   },
@@ -3272,49 +3342,49 @@ for _, data in ipairs({
     name = "test_has_properties_anywhere_or_is_nil/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -3468,6 +3538,26 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -3497,7 +3587,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/nil",
     args = {
       value = nil,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3505,7 +3595,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/boolean",
     args = {
       value = true,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3513,7 +3603,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/number/integer",
     args = {
       value = 23,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3521,7 +3611,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/number/float",
     args = {
       value = 2.3,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3529,15 +3619,15 @@ for _, data in ipairs({
     name = "test_has_metamethods/string",
     args = {
       value = "test",
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods/function",
     args = {
       value = function() end,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3545,7 +3635,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/table/without_metatable",
     args = {
       value = {},
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3553,9 +3643,9 @@ for _, data in ipairs({
     name = "test_has_metamethods/table/without_metamethods",
     args = {
       value = setmetatable({}, {}),
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods"
@@ -3609,6 +3699,17 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_metamethods"
+      .. "/table"
+      .. "/with_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -3638,7 +3739,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/nil",
     args = {
       value = nil,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_no_error,
   },
@@ -3646,7 +3747,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/boolean",
     args = {
       value = true,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3654,7 +3755,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/number/integer",
     args = {
       value = 23,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3662,7 +3763,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/number/float",
     args = {
       value = 2.3,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3670,15 +3771,15 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/string",
     args = {
       value = "test",
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil/function",
     args = {
       value = function() end,
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3686,7 +3787,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/table/without_metatable",
     args = {
       value = {},
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
     want = _assert_error,
   },
@@ -3694,9 +3795,9 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/table/without_metamethods",
     args = {
       value = setmetatable({}, {}),
-      metamethod_names = {},
+      metamethod_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_metamethods_or_is_nil"
@@ -3750,6 +3851,17 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_metamethods_or_is_nil"
+      .. "/table"
+      .. "/with_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -3779,57 +3891,57 @@ for _, data in ipairs({
     name = "test_has_methods/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods/table/with_non-callable_values",
@@ -3917,6 +4029,17 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_methods/table/with_methods/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -3946,7 +4069,7 @@ for _, data in ipairs({
     name = "test_has_methods_or_is_nil/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two"},
     },
     want = _assert_no_error,
   },
@@ -3954,49 +4077,49 @@ for _, data in ipairs({
     name = "test_has_methods_or_is_nil/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_or_is_nil/table/with_non-callable_values",
@@ -4086,6 +4209,20 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_methods_or_is_nil"
+      .. "/table"
+      .. "/with_methods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -4115,57 +4252,57 @@ for _, data in ipairs({
     name = "test_has_methods_anywhere/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere/table/with_regular_methods",
@@ -4311,6 +4448,26 @@ for _, data in ipairs({
     },
     want = _assert_error,
   },
+  {
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      method_names = {},
+    },
+    want = _assert_no_error,
+  },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do
     local name = string.format("%s/%s", data.name, assertions_mode)
@@ -4340,7 +4497,7 @@ for _, data in ipairs({
     name = "test_has_methods_anywhere_or_is_nil/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
     want = _assert_no_error,
   },
@@ -4348,49 +4505,49 @@ for _, data in ipairs({
     name = "test_has_methods_anywhere_or_is_nil/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = _assert_no_error,
+    want = _assert_error,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods",
@@ -4539,6 +4696,26 @@ for _, data in ipairs({
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = _assert_error,
+  },
+  {
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      method_names = {},
+    },
+    want = _assert_no_error,
   },
 }) do
   for _, assertions_mode in ipairs({"without_assertions", "with_assertions"}) do

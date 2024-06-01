@@ -3412,7 +3412,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/nil",
     args = {
       value = nil,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3420,7 +3420,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/boolean",
     args = {
       value = true,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3428,7 +3428,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/number/integer",
     args = {
       value = 23,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3436,7 +3436,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/number/float",
     args = {
       value = 2.3,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3444,15 +3444,15 @@ for _, data in ipairs({
     name = "test_has_metaproperties/string",
     args = {
       value = "test",
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metaproperties/function",
     args = {
       value = function() end,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3460,7 +3460,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties/table/without_metatable",
     args = {
       value = {},
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3468,9 +3468,9 @@ for _, data in ipairs({
     name = "test_has_metaproperties/table/without_metaproperties",
     args = {
       value = setmetatable({}, {}),
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metaproperties"
@@ -3524,6 +3524,17 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_metaproperties"
+      .. "/table"
+      .. "/with_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_metaproperties(
@@ -3542,7 +3553,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/nil",
     args = {
       value = nil,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3550,7 +3561,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/boolean",
     args = {
       value = true,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3558,7 +3569,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/number/integer",
     args = {
       value = 23,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3566,7 +3577,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/number/float",
     args = {
       value = 2.3,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3574,15 +3585,15 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/string",
     args = {
       value = "test",
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metaproperties_checker/function",
     args = {
       value = function() end,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3590,7 +3601,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/table/without_metatable",
     args = {
       value = {},
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3598,9 +3609,9 @@ for _, data in ipairs({
     name = "test_make_metaproperties_checker/table/without_metaproperties",
     args = {
       value = setmetatable({}, {}),
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metaproperties_checker"
@@ -3657,6 +3668,17 @@ for _, data in ipairs({
       metaproperty_names = {"__eq", "__add"},
     },
     want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_checker"
+      .. "/table"
+      .. "/with_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
   },
 }) do
   TestChecks[data.name] = function()
@@ -3679,7 +3701,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/nil",
     args = {
       value = nil,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -3687,7 +3709,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/boolean",
     args = {
       value = true,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3695,7 +3717,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/number/integer",
     args = {
       value = 23,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3703,7 +3725,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/number/float",
     args = {
       value = 2.3,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3711,15 +3733,15 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/string",
     args = {
       value = "test",
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metaproperties_or_is_nil/function",
     args = {
       value = function() end,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3727,7 +3749,7 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/table/without_metatable",
     args = {
       value = {},
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3735,9 +3757,9 @@ for _, data in ipairs({
     name = "test_has_metaproperties_or_is_nil/table/without_metaproperties",
     args = {
       value = setmetatable({}, {}),
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metaproperties_or_is_nil"
@@ -3794,6 +3816,17 @@ for _, data in ipairs({
       metaproperty_names = {"__eq", "__add"},
     },
     want = luaunit.assert_false,
+  },
+  {
+    name = "test_has_metaproperties_or_is_nil"
+      .. "/table"
+      .. "/with_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
   },
 }) do
   TestChecks[data.name] = function()
@@ -3813,7 +3846,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_or_nil_checker/nil",
     args = {
       value = nil,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -3821,7 +3854,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_or_nil_checker/boolean",
     args = {
       value = true,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3829,7 +3862,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_or_nil_checker/number/integer",
     args = {
       value = 23,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3837,7 +3870,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_or_nil_checker/number/float",
     args = {
       value = 2.3,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3845,15 +3878,15 @@ for _, data in ipairs({
     name = "test_make_metaproperties_or_nil_checker/string",
     args = {
       value = "test",
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metaproperties_or_nil_checker/function",
     args = {
       value = function() end,
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3861,7 +3894,7 @@ for _, data in ipairs({
     name = "test_make_metaproperties_or_nil_checker/table/without_metatable",
     args = {
       value = {},
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -3871,9 +3904,9 @@ for _, data in ipairs({
       .. "/without_metaproperties",
     args = {
       value = setmetatable({}, {}),
-      metaproperty_names = {},
+      metaproperty_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metaproperties_or_nil_checker"
@@ -3930,6 +3963,17 @@ for _, data in ipairs({
       metaproperty_names = {"__eq", "__add"},
     },
     want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_metaproperties_or_nil_checker"
+      .. "/table"
+      .. "/with_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metaproperty_names = {},
+    },
+    want = luaunit.assert_true,
   },
 }) do
   TestChecks[data.name] = function()
@@ -3952,57 +3996,57 @@ for _, data in ipairs({
     name = "test_has_properties/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties/table/with_non-callable_values",
@@ -4092,6 +4136,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_properties"
+      .. "/table"
+      .. "/with_properties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_properties(
@@ -4110,57 +4168,57 @@ for _, data in ipairs({
     name = "test_make_properties_checker/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_checker/table/with_non-callable_values",
@@ -4250,6 +4308,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_properties_checker"
+      .. "/table"
+      .. "/with_properties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_properties_checker(data.args.property_names)
@@ -4269,7 +4341,7 @@ for _, data in ipairs({
     name = "test_has_properties_or_is_nil/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two"},
     },
     want = luaunit.assert_true,
   },
@@ -4277,49 +4349,49 @@ for _, data in ipairs({
     name = "test_has_properties_or_is_nil/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_or_is_nil/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_or_is_nil/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_or_is_nil/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_or_is_nil/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_or_is_nil/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_or_is_nil/table/with_non-callable_values",
@@ -4409,6 +4481,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_properties_or_is_nil"
+      .. "/table"
+      .. "/with_properties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_properties_or_is_nil(
@@ -4427,7 +4513,7 @@ for _, data in ipairs({
     name = "test_make_properties_or_nil_checker/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two"},
     },
     want = luaunit.assert_true,
   },
@@ -4435,49 +4521,49 @@ for _, data in ipairs({
     name = "test_make_properties_or_nil_checker/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_or_nil_checker/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_or_nil_checker/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_or_nil_checker/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_or_nil_checker/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_or_nil_checker/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_or_nil_checker/table/with_non-callable_values",
@@ -4575,6 +4661,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_properties_or_nil_checker"
+      .. "/table"
+      .. "/with_properties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_properties_or_nil_checker(
@@ -4596,57 +4696,57 @@ for _, data in ipairs({
     name = "test_has_properties_anywhere/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere/table/with_regular_properties",
@@ -4792,6 +4892,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_properties_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_properties_anywhere(
@@ -4810,57 +4930,57 @@ for _, data in ipairs({
     name = "test_make_properties_anywhere_checker/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_checker"
@@ -5014,6 +5134,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_properties_anywhere_checker"
+      .. "/table"
+      .. "/with_regular_and_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_properties_anywhere_checker(
@@ -5035,7 +5175,7 @@ for _, data in ipairs({
     name = "test_has_properties_anywhere_or_is_nil/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -5043,49 +5183,49 @@ for _, data in ipairs({
     name = "test_has_properties_anywhere_or_is_nil/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_properties_anywhere_or_is_nil"
@@ -5239,6 +5379,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_properties_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_properties_anywhere_or_is_nil(
@@ -5257,7 +5417,7 @@ for _, data in ipairs({
     name = "test_make_properties_anywhere_or_nil_checker/nil",
     args = {
       value = nil,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -5265,49 +5425,49 @@ for _, data in ipairs({
     name = "test_make_properties_anywhere_or_nil_checker/boolean",
     args = {
       value = true,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_or_nil_checker/number/integer",
     args = {
       value = 23,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_or_nil_checker/number/float",
     args = {
       value = 2.3,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_or_nil_checker/string",
     args = {
       value = "test",
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_or_nil_checker/function",
     args = {
       value = function() end,
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_or_nil_checker/table/empty",
     args = {
       value = {},
-      property_names = {},
+      property_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_properties_anywhere_or_nil_checker"
@@ -5463,6 +5623,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_properties_anywhere_or_nil_checker"
+      .. "/table"
+      .. "/with_regular_and_metaproperties"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      property_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_properties_anywhere_or_nil_checker(
@@ -5484,7 +5664,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/nil",
     args = {
       value = nil,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5492,7 +5672,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/boolean",
     args = {
       value = true,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5500,7 +5680,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/number/integer",
     args = {
       value = 23,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5508,7 +5688,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/number/float",
     args = {
       value = 2.3,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5516,15 +5696,15 @@ for _, data in ipairs({
     name = "test_has_metamethods/string",
     args = {
       value = "test",
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metamethods/function",
     args = {
       value = function() end,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5532,7 +5712,7 @@ for _, data in ipairs({
     name = "test_has_metamethods/table/without_metatable",
     args = {
       value = {},
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5540,9 +5720,9 @@ for _, data in ipairs({
     name = "test_has_metamethods/table/without_metamethods",
     args = {
       value = setmetatable({}, {}),
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metamethods"
@@ -5596,6 +5776,17 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_metamethods"
+      .. "/table"
+      .. "/with_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_metamethods(
@@ -5614,7 +5805,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/nil",
     args = {
       value = nil,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5622,7 +5813,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/boolean",
     args = {
       value = true,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5630,7 +5821,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/number/integer",
     args = {
       value = 23,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5638,7 +5829,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/number/float",
     args = {
       value = 2.3,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5646,15 +5837,15 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/string",
     args = {
       value = "test",
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metamethods_checker/function",
     args = {
       value = function() end,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5662,7 +5853,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/table/without_metatable",
     args = {
       value = {},
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5670,9 +5861,9 @@ for _, data in ipairs({
     name = "test_make_metamethods_checker/table/without_metamethods",
     args = {
       value = setmetatable({}, {}),
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metamethods_checker"
@@ -5726,6 +5917,17 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_metamethods_checker"
+      .. "/table"
+      .. "/with_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_metamethods_checker(data.args.metamethod_names)
@@ -5745,7 +5947,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/nil",
     args = {
       value = nil,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -5753,7 +5955,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/boolean",
     args = {
       value = true,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5761,7 +5963,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/number/integer",
     args = {
       value = 23,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5769,7 +5971,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/number/float",
     args = {
       value = 2.3,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5777,15 +5979,15 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/string",
     args = {
       value = "test",
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metamethods_or_is_nil/function",
     args = {
       value = function() end,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5793,7 +5995,7 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/table/without_metatable",
     args = {
       value = {},
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5801,9 +6003,9 @@ for _, data in ipairs({
     name = "test_has_metamethods_or_is_nil/table/without_metamethods",
     args = {
       value = setmetatable({}, {}),
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_metamethods_or_is_nil"
@@ -5857,6 +6059,17 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_metamethods_or_is_nil"
+      .. "/table"
+      .. "/with_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_metamethods_or_is_nil(
@@ -5875,7 +6088,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/nil",
     args = {
       value = nil,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -5883,7 +6096,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/boolean",
     args = {
       value = true,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5891,7 +6104,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/number/integer",
     args = {
       value = 23,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5899,7 +6112,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/number/float",
     args = {
       value = 2.3,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5907,15 +6120,15 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/string",
     args = {
       value = "test",
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metamethods_or_nil_checker/function",
     args = {
       value = function() end,
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5923,7 +6136,7 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/table/without_metatable",
     args = {
       value = {},
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
     want = luaunit.assert_false,
   },
@@ -5931,9 +6144,9 @@ for _, data in ipairs({
     name = "test_make_metamethods_or_nil_checker/table/without_metamethods",
     args = {
       value = setmetatable({}, {}),
-      metamethod_names = {},
+      metamethod_names = {"__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_metamethods_or_nil_checker"
@@ -5991,6 +6204,17 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_metamethods_or_nil_checker"
+      .. "/table"
+      .. "/with_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = Object:new(23),
+      metamethod_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_metamethods_or_nil_checker(
@@ -6012,57 +6236,57 @@ for _, data in ipairs({
     name = "test_has_methods/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods/table/with_non-callable_values",
@@ -6150,6 +6374,17 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_methods/table/with_methods/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_methods(
@@ -6168,57 +6403,57 @@ for _, data in ipairs({
     name = "test_make_methods_checker/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_checker/table/with_non-callable_values",
@@ -6308,6 +6543,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_methods_checker"
+      .. "/table"
+      .. "/with_methods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_methods_checker(data.args.method_names)
@@ -6327,7 +6576,7 @@ for _, data in ipairs({
     name = "test_has_methods_or_is_nil/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two"},
     },
     want = luaunit.assert_true,
   },
@@ -6335,49 +6584,49 @@ for _, data in ipairs({
     name = "test_has_methods_or_is_nil/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_or_is_nil/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_or_is_nil/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_or_is_nil/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_or_is_nil/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_or_is_nil/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_or_is_nil/table/with_non-callable_values",
@@ -6467,6 +6716,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_methods_or_is_nil"
+      .. "/table"
+      .. "/with_methods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_methods_or_is_nil(
@@ -6485,7 +6748,7 @@ for _, data in ipairs({
     name = "test_make_methods_or_nil_checker/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two"},
     },
     want = luaunit.assert_true,
   },
@@ -6493,49 +6756,49 @@ for _, data in ipairs({
     name = "test_make_methods_or_nil_checker/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_or_nil_checker/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_or_nil_checker/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_or_nil_checker/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_or_nil_checker/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_or_nil_checker/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_or_nil_checker/table/with_non-callable_values",
@@ -6627,6 +6890,20 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_methods_or_nil_checker"
+      .. "/table"
+      .. "/with_methods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = {
+        one = function() end,
+        two = function() end,
+      },
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_methods_or_nil_checker(
@@ -6648,57 +6925,57 @@ for _, data in ipairs({
     name = "test_has_methods_anywhere/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere/table/with_regular_methods",
@@ -6844,6 +7121,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_methods_anywhere"
+      .. "/table"
+      .. "/with_regular_and_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_methods_anywhere(
@@ -6862,57 +7159,57 @@ for _, data in ipairs({
     name = "test_make_methods_anywhere_checker/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_checker/table/with_regular_methods",
@@ -7062,6 +7359,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_make_methods_anywhere_checker"
+      .. "/table"
+      .. "/with_regular_and_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local checker = checks.make_methods_anywhere_checker(data.args.method_names)
@@ -7081,7 +7398,7 @@ for _, data in ipairs({
     name = "test_has_methods_anywhere_or_is_nil/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -7089,49 +7406,49 @@ for _, data in ipairs({
     name = "test_has_methods_anywhere_or_is_nil/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_has_methods_anywhere_or_is_nil/table/with_regular_methods",
@@ -7281,6 +7598,26 @@ for _, data in ipairs({
     },
     want = luaunit.assert_false,
   },
+  {
+    name = "test_has_methods_anywhere_or_is_nil"
+      .. "/table"
+      .. "/with_regular_and_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      method_names = {},
+    },
+    want = luaunit.assert_true,
+  },
 }) do
   TestChecks[data.name] = function()
     local result = checks.has_methods_anywhere_or_is_nil(
@@ -7299,7 +7636,7 @@ for _, data in ipairs({
     name = "test_make_methods_anywhere_or_nil_checker/nil",
     args = {
       value = nil,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
     want = luaunit.assert_true,
   },
@@ -7307,49 +7644,49 @@ for _, data in ipairs({
     name = "test_make_methods_anywhere_or_nil_checker/boolean",
     args = {
       value = true,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_or_nil_checker/number/integer",
     args = {
       value = 23,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_or_nil_checker/number/float",
     args = {
       value = 2.3,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_or_nil_checker/string",
     args = {
       value = "test",
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_or_nil_checker/function",
     args = {
       value = function() end,
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_or_nil_checker/table/empty",
     args = {
       value = {},
-      method_names = {},
+      method_names = {"one", "two", "__one", "__two"},
     },
-    want = luaunit.assert_true,
+    want = luaunit.assert_false,
   },
   {
     name = "test_make_methods_anywhere_or_nil_checker"
@@ -7502,6 +7839,26 @@ for _, data in ipairs({
       method_names = {"one", "two", "__eq", "__call"},
     },
     want = luaunit.assert_false,
+  },
+  {
+    name = "test_make_methods_anywhere_or_nil_checker"
+      .. "/table"
+      .. "/with_regular_and_metamethods"
+      .. "/with_request_for_empty_set",
+    args = {
+      value = setmetatable(
+        {
+          one = function() end,
+          two = function() end,
+        },
+        {
+          __eq = function() end,
+          __call = function() end,
+        }
+      ),
+      method_names = {},
+    },
+    want = luaunit.assert_true,
   },
 }) do
   TestChecks[data.name] = function()
