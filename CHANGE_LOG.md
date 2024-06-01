@@ -1,5 +1,33 @@
 # Change Log
 
+## [v1.3.4](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.4) (2024-06-02)
+
+Fix the bug with checking non-table values.
+
+- fix the `checks._are_properties_existing_and_valid()` function:
+  - fix the bug with checking non-table values;
+  - indirectly affected functions:
+    - property checks:
+      - `checks.has_properties()`;
+      - `checks.make_properties_checker()`;
+      - `checks.has_properties_or_is_nil()`;
+      - `checks.make_properties_or_nil_checker()`;
+      - `checks.has_properties_anywhere()`;
+      - `checks.make_properties_anywhere_checker()`;
+      - `checks.has_properties_anywhere_or_is_nil()`;
+      - `checks.make_properties_anywhere_or_nil_checker()`;
+    - method checks:
+      - `checks.has_methods()`;
+      - `checks.make_methods_checker()`;
+      - `checks.has_methods_or_is_nil()`;
+      - `checks.make_methods_or_nil_checker()`;
+      - `checks.has_methods_anywhere()`;
+      - `checks.make_methods_anywhere_checker()`;
+      - `checks.has_methods_anywhere_or_is_nil()`;
+      - `checks.make_methods_anywhere_or_nil_checker()`;
+- fix the tests of regular and metaproperties/methods:
+  - add the test cases with checking non-table values against a list of regular and metaproperties/methods.
+
 ## [v1.3.3](https://github.com/thewizardplusplus/luatypechecks/tree/v1.3.3) (2024-03-24)
 
 Add the `lint` and `doc` workflows for GitHub Actions; improve the documentation.
